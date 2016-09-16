@@ -21,36 +21,42 @@ import java.util.Date;
 public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "MalariaDatabase";
-    private static final String userMedicationChoiceTable = "userSettings";
-    private static final String appSettingTable = "appSettings";
-    private static final String locationTable = "locationSettings";
+    private static final String USER_MEDICATION_CHOIC_TABLE = "userSettings";
+    private static final String APP_SETTING_TABLE = "appSettings";
+    private static final String LOCATION_TABLE = "locationSettings";
     private static final String packingTable = "packingSettings";
-    private static final String TAGDSH= "DatabaseSQLiteHelper";
+    private static final String TAGDSH = "DatabaseSQLiteHelper";
     public static final String LOCATION = "Location";
-    public static final String PACKING_ITEM = "PackingItem";
     public static final String KEY_ROW_ID = "_id";
-    public static final String QUANTITY = "Quantity";
 
-    private final int[] daysOfMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30,
-            31, 30, 31 };
-    private final int[] daysOfMonthLeap = { 31, 29, 31, 30, 31, 30, 31, 31, 30,
-            31, 30, 31 };
+    private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30,
+            31, 30, 31};
+    private final int[] daysOfMonthLeap = {31, 29, 31, 30, 31, 30, 31, 31, 30,
+            31, 30, 31};
 
-    public DatabaseSQLiteHelper(Context context) {
+    public DatabaseSQLiteHelper(final Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase database) {
+    public void onCreate(final SQLiteDatabase database) {
         /**Creating Tables**/
-        database.execSQL("CREATE TABLE " + userMedicationChoiceTable + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, Drug INTEGER,Choice VARCHAR, Month VARCHAR, Year VARCHAR,Status VARCHAR,Date INTEGER,Percentage DOUBLE, Timestamp VARCHAR);");
-        database.execSQL("CREATE TABLE " + appSettingTable + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, Drug VARCHAR, Choice VARCHAR, WeeklyDay INTEGER, FirstTime LONG, FreshInstall VARCHAR);");
-        database.execSQL("CREATE TABLE " + locationTable + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, Location VARCHAR, Times INTEGER);");
-        database.execSQL("CREATE TABLE " + packingTable + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, PackingItem VARCHAR, Quantity INTEGER, Status VARCHAR);");
+        database.execSQL("CREATE TABLE " + USER_MEDICATION_CHOIC_TABLE
+                + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, Drug INTEGER,Choice VARCHAR, "
+                + "Month VARCHAR, Year VARCHAR,Status VARCHAR,Date INTEGER, "
+                + "Percentage DOUBLE, Timestamp VARCHAR);");
+        database.execSQL("CREATE TABLE " + APP_SETTING_TABLE
+                + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, Drug VARCHAR, Choice VARCHAR,"
+                + "WeeklyDay INTEGER, FirstTime LONG, FreshInstall VARCHAR);");
+        database.execSQL("CREATE TABLE " + LOCATION_TABLE
+                + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, Location VARCHAR, Times INTEGER);");
+        database.execSQL("CREATE TABLE " + packingTable
+                + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, PackingItem VARCHAR,"
+                + "Quantity INTEGER, Status VARCHAR);");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+    public void onUpgrade(final SQLiteDatabase database, final int oldVersion, final int newVersion) {
 
 
     }
@@ -59,7 +65,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public static ArrayList<Integer> date;
 
     /**Method to Update the Progress Bars**/
-    public int getData(int month, int year, String choice) {
+    public int getData(final int month, final int year, final String choice) {
 
         percentage = new ArrayList<Double>();
         date = new ArrayList<Integer>();
@@ -67,7 +73,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String column[] = {"_id", "Date", "Percentage"};
         String args[] = {"" + month, "" + year, "yes", choice};
-        Cursor cursor = sqLiteDatabase.query(userMedicationChoiceTable, column, "Month =? AND Year =? AND Status =? AND Choice =?", args, null, null,"Date ASC");
+        Cursor cursor = sqLiteDatabase.query(USER_MEDICATION_CHOIC_TABLE, column, "Month =? AND Year =? AND Status =? AND Choice =?", args, null, null,"Date ASC");
         boolean isDataFound = false;
         while (cursor.moveToNext()) {
             isDataFound = true;
@@ -119,7 +125,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         values.put("Date", cal.get(Calendar.DATE));
         values.put("Percentage", percentage);
         values.put("Timestamp",ts);
-        this.getWritableDatabase().insert(userMedicationChoiceTable, "medication", values);
+        this.getWritableDatabase().insert(USER_MEDICATION_CHOIC_TABLE, "medication", values);
         this.getWritableDatabase().close();
 
     }
@@ -130,7 +136,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqDB= getWritableDatabase();
         String [] column={"FreshInstall"};
         ContentValues cv =new ContentValues(2);
-        Cursor cursor=sqDB.query(appSettingTable,column,null,null,null,null,"_id ASC LIMIT 1");
+        Cursor cursor=sqDB.query(APP_SETTING_TABLE,column,null,null,null,null,"_id ASC LIMIT 1");
         cursor.moveToNext();
         try {
 
@@ -145,8 +151,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 cv.put("WeeklyDay",w);
                 cv.put("FreshInstall","true");
                 String [] args={"1"};
-                sqDB.delete(appSettingTable,"_id = ?",args);
-                sqDB.insert(appSettingTable,"settings",cv);
+                sqDB.delete(APP_SETTING_TABLE,"_id = ?",args);
+                sqDB.insert(APP_SETTING_TABLE,"settings",cv);
             }
 
         }
@@ -160,7 +166,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             cv.put("WeeklyDay", w);
             cv.put("FreshInstall", "true");
             String [] args={"1"};
-            sqDB.insert(appSettingTable,"settings",cv);
+            sqDB.insert(APP_SETTING_TABLE,"settings",cv);
         }
     }
 
@@ -173,7 +179,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String[] selArgs = {"" + month, "" + year, choice};
 
         StringBuffer buffer = new StringBuffer();
-        Cursor cursor = sqDB.query(userMedicationChoiceTable, columns, "Month =? AND Year =? AND Choice =?", selArgs, null, null, null, null);
+        Cursor cursor = sqDB.query(USER_MEDICATION_CHOIC_TABLE, columns, "Month =? AND Year =? AND Choice =?", selArgs, null, null, null, null);
         int idx0,idx1,idx2;
 
          /**Queried for a Month in an Year, stopping when the date required is found**/
@@ -208,8 +214,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String[] args = new String[]{String.valueOf(date), String.valueOf(month),String.valueOf(year)};
         String[] column = {"Percentage"};
         /**Update is used instead of Insert, because the entry already exist**/
-        sqDB.update(userMedicationChoiceTable, values, "Date=? AND Month=? AND YEAR=?", args);
-        Cursor cursor=sqDB.query(userMedicationChoiceTable,column,null,null,null,null,null);
+        sqDB.update(USER_MEDICATION_CHOIC_TABLE, values, "Date=? AND Month=? AND YEAR=?", args);
+        Cursor cursor=sqDB.query(USER_MEDICATION_CHOIC_TABLE,column,null,null,null,null,null);
         while(cursor.moveToNext())
         {
          Log.d(TAGDSH, "Percentage:" + cursor.getDouble(0));
@@ -236,7 +242,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         String []columns={"Status"};
         String []selArgs= {""+date,""+month,""+year};
-        Cursor cursor = sqDB.query(userMedicationChoiceTable, columns, "Date=? AND Month =? AND Year =?", selArgs, null, null, null, null);
+        Cursor cursor = sqDB.query(USER_MEDICATION_CHOIC_TABLE, columns, "Date=? AND Month =? AND Year =?", selArgs, null, null, null, null);
         int idx0; String st=""; int flag=0;
         while(cursor.moveToNext())
         {
@@ -255,11 +261,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             cv.put("Date", date);
             cv.put("Percentage", percentage);
             cv.put("Timestamp", ts);
-            sqDB.insert(userMedicationChoiceTable, "medicaton", cv);
+            sqDB.insert(USER_MEDICATION_CHOIC_TABLE, "medicaton", cv);
 
             String []col ={"Date"};
             String []arg = {""+month,""+year};
-            Cursor crsr = sqDB.query(userMedicationChoiceTable,col,"Month =? AND Year =?",arg,null,null,"Date ASC");
+            Cursor crsr = sqDB.query(USER_MEDICATION_CHOIC_TABLE,col,"Month =? AND Year =?",arg,null,null,"Date ASC");
             int count=1,p,lim,ft=0;
             while (cursor.moveToNext())
             {
@@ -284,7 +290,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                        cv.put("Date", date+i);
                        cv.put("Percentage", percentage);
                        cv.put("Timestamp", ts);
-                       sqDB.insert(userMedicationChoiceTable, "medicaton", cv);
+                       sqDB.insert(USER_MEDICATION_CHOIC_TABLE, "medicaton", cv);
                    }
 
                 }
@@ -304,7 +310,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqDB = getWritableDatabase();
         String column[] = {"Status"};
         String args[] = {""+date,"" + month, ""+year};
-        Cursor cursor = sqDB.query(userMedicationChoiceTable, column, "Date=? AND Month =? AND Year =?", args, null, null, null, null);
+        Cursor cursor = sqDB.query(USER_MEDICATION_CHOIC_TABLE, column, "Date=? AND Month =? AND Year =?", args, null, null, null, null);
         int idx=0;
         String status="";
         while(cursor.moveToNext())
@@ -329,7 +335,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public long getFirstTime() {
         SQLiteDatabase sqDB = getWritableDatabase();
         String column[]={"Timestamp"};
-        Cursor cursor = sqDB.query(userMedicationChoiceTable,column,null,null,null,null,"Timestamp ASC LIMIT 1");
+        Cursor cursor = sqDB.query(USER_MEDICATION_CHOIC_TABLE,column,null,null,null,null,"Timestamp ASC LIMIT 1");
         int idx=0; String selected_date=""; long firstRunTime=0;
         while (cursor.moveToNext())
         {
@@ -359,7 +365,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column = {"Status"};
         String []selArgs = {""+date,""+month,""+year};
-        Cursor cursor= sqDB.query(userMedicationChoiceTable,column,"Date =? AND Month =? AND Year =?",selArgs,null,null,null,null);
+        Cursor cursor= sqDB.query(USER_MEDICATION_CHOIC_TABLE,column,"Date =? AND Month =? AND Year =?",selArgs,null,null,null,null);
 
         while(cursor.moveToNext())
         {
@@ -377,7 +383,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column={"Status","Timestamp","Date","Month","Year","Choice"};
-        Cursor cursor= sqDB.query(userMedicationChoiceTable,column,null,null,null,null,"Timestamp DESC");
+        Cursor cursor= sqDB.query(USER_MEDICATION_CHOIC_TABLE,column,null,null,null,null,"Timestamp DESC");
         int dosesInaRow=0,prevDate=0,currDate=0,currDateMonth=0,prevDateMonth=0,prevDateYear=0,currDateYear=0;
         String ts="";
         /**One Iteration is done before entering the while loop for updating the previous and current date**/
@@ -459,7 +465,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column={"Status","Timestamp","Date","Month","Year"};
 
-        Cursor cursor= sqDB.query(userMedicationChoiceTable,column,null,null,null,null,"Timestamp DESC");
+        Cursor cursor= sqDB.query(USER_MEDICATION_CHOIC_TABLE,column,null,null,null,null,"Timestamp DESC");
         int dosesInaRow=1,aMonth=0,pMonth=0;
         Date ado,pdo;
         int pPara=0;
@@ -556,7 +562,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqDB=getWritableDatabase();
         String [] column={"Date","Month","Year"};
         String recentDate="";
-        Cursor cursor = sqDB.query(userMedicationChoiceTable, column, null, null, null, null, "Timestamp DESC LIMIT 1");
+        Cursor cursor = sqDB.query(USER_MEDICATION_CHOIC_TABLE, column, null, null, null, null, "Timestamp DESC LIMIT 1");
         if(cursor!=null)
         { cursor.moveToNext();
             try
@@ -575,9 +581,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public void resetDatabase()
     {
         SQLiteDatabase sqDB = getWritableDatabase();
-        sqDB.delete(userMedicationChoiceTable,null,null);
-        sqDB.delete(appSettingTable,null,null);
-        sqDB.delete(locationTable,null,null);
+        sqDB.delete(USER_MEDICATION_CHOIC_TABLE,null,null);
+        sqDB.delete(APP_SETTING_TABLE,null,null);
+        sqDB.delete(LOCATION_TABLE,null,null);
         sqDB.delete(packingTable,null,null);
         sqDB.close();
     }
@@ -593,7 +599,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String [] columns = {"Location","Times"};
         String [] selArgs = {""+location};
 
-        Cursor cursor = sqDB.query(locationTable,columns,"Location = ?",selArgs,null,null,null);
+        Cursor cursor = sqDB.query(LOCATION_TABLE,columns,"Location = ?",selArgs,null,null,null);
 
         while (cursor.moveToNext())
         {
@@ -604,9 +610,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         cv.put("Times", a);
 
         if(flag==1)
-            sqDB.update(locationTable, cv, "Location= ?", selArgs);
+            sqDB.update(LOCATION_TABLE, cv, "Location= ?", selArgs);
         else
-            sqDB.insert(locationTable, "location", cv);
+            sqDB.insert(LOCATION_TABLE, "location", cv);
 
 
     }
@@ -618,7 +624,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column={"_id","Location"};
 
-        return sqDB.query(locationTable, column,
+        return sqDB.query(LOCATION_TABLE, column,
                 null, null, null, null,
                 KEY_ROW_ID + " asc ");
     }
@@ -726,7 +732,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column={"Status","Timestamp","Date","Month","Year","Choice"};
-        Cursor cursor= sqDB.query(userMedicationChoiceTable,column,null,null,null,null,"Timestamp ASC");
+        Cursor cursor= sqDB.query(USER_MEDICATION_CHOIC_TABLE,column,null,null,null,null,"Timestamp ASC");
         int count=0;
         if(cursor!=null)
         {
@@ -813,7 +819,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column={"Status","Timestamp","Date","Month","Year","Choice"};
-        Cursor cursor= sqDB.query(userMedicationChoiceTable,column,null,null,null,null,"Timestamp ASC");
+        Cursor cursor= sqDB.query(USER_MEDICATION_CHOIC_TABLE,column,null,null,null,null,"Timestamp ASC");
         int count=0;
 
         if(cursor!=null)
@@ -867,10 +873,5 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
         sqDB.close();
         return count;
-
-
     }
-
-
-
 }
