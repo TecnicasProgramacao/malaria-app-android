@@ -21,11 +21,11 @@ import java.util.Date;
 public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "MalariaDatabase";
-    private static final String USER_MEDICATION_CHOICE_TABLE= "userSettings";
+    private static final String USER_MEDICATION_CHOICE_TABLE = "userSettings";
     private static final String APP_SETTING_TABLE = "appSettings";
     private static final String LOCATION_TABLE = "locationSettings";
-    private static final String packingTable = "packingSettings";
-    private static final String TAG_DATABASE_HELPER= "DatabaseSQLiteHelper";
+    private static final String PACKING_TABLE = "packingSettings";
+    private static final String TAG_DATABASE_HELPER = "DatabaseSQLiteHelper";
     public static final String LOCATION = "Location";
     public static final String KEY_ROW_ID = "_id";
 
@@ -34,7 +34,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     private final int[] daysOfMonthLeap = {31, 29, 31, 30, 31, 30, 31, 31, 30,
             31, 30, 31};
 
-    public DatabaseSQLiteHelper(final Context context) {
+    public DatabaseSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
@@ -50,7 +50,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 + "WeeklyDay INTEGER, FirstTime LONG, FreshInstall VARCHAR);");
         database.execSQL("CREATE TABLE " + LOCATION_TABLE
                 + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, Location VARCHAR, Times INTEGER);");
-        database.execSQL("CREATE TABLE " + packingTable
+        database.execSQL("CREATE TABLE " + PACKING_TABLE
                 + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, PackingItem VARCHAR,"
                 + "Quantity INTEGER, Status VARCHAR);");
     }
@@ -97,10 +97,18 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return count;
     }
 
+    public boolean dayIsSingleDigit(final int dayOfMonth) {
+        if (dayOfMonth >= 10) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /**Method to Update the User Selection of Medicine and it's Status of whether Medicine was taken or not.
      * Used in Alert Dialog to Directly update the current Status
      * Used in Home Screen Fragment for updating the current status through tick marks**/
-    public void getUserMedicationSelection(final String choice, final Date date,
+    public void getUserMedicationSelection(final Context context, final String choice, final Date date,
                                            final String status, final Double percentage) {
         ContentValues values = new ContentValues(2);
         Calendar calendarAux;
@@ -109,7 +117,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         int dayOfMonth = calendarAux.get(Calendar.DATE);
         String timeStamp = "";
 
-        if (dayOfMonth >= 10) {
+        if (dayIsSingleDigit(dayOfMonth)) {
             timeStamp = "" + calendarAux.get(Calendar.YEAR) + "-" + calendarAux.get(Calendar.MONTH) + "-"
                     + calendarAux.get(Calendar.DATE);
         } else {
@@ -584,7 +592,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         sqDB.delete(USER_MEDICATION_CHOICE_TABLE,null,null);
         sqDB.delete(APP_SETTING_TABLE,null,null);
         sqDB.delete(LOCATION_TABLE,null,null);
-        sqDB.delete(packingTable,null,null);
+        sqDB.delete(PACKING_TABLE,null,null);
         sqDB.close();
     }
 
@@ -641,7 +649,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String [] columns = {"PackingItem","Quantity","Status"};
         String [] selArgs = {""+pItem};
 
-        Cursor cursor = sqDB.query(packingTable,columns,"PackingItem = ?",selArgs,null,null,null);
+        Cursor cursor = sqDB.query(PACKING_TABLE,columns,"PackingItem = ?",selArgs,null,null,null);
 
         while (cursor.moveToNext())
         {
@@ -654,11 +662,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         if(flag==1) {
 
             cv.put("Quantity", quantity);
-            sqDB.update(packingTable, cv, "PackingItem= ?", selArgs);
+            sqDB.update(PACKING_TABLE, cv, "PackingItem= ?", selArgs);
         }
         else {
             cv.put("Quantity", quantity);
-            sqDB.insert(packingTable, "item", cv);
+            sqDB.insert(PACKING_TABLE, "item", cv);
         }
 
 
@@ -671,12 +679,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column={"_id","PackingItem","Quantity"};
         String []selArgs={"yes"};
-        /*return sqDB.query(packingTable, column,
-                null, null, null, null,
-                KEY_ROW_ID + " asc ");*/
 
 
-        Cursor cursor = sqDB.query(packingTable,column,"Status= ?",selArgs,null,null,KEY_ROW_ID+" asc ");
+        Cursor cursor = sqDB.query(PACKING_TABLE,column,"Status= ?",selArgs,null,null,KEY_ROW_ID+" asc ");
 
         return cursor;
 
@@ -688,7 +693,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column={"_id","PackingItem","Quantity"};
-        return sqDB.query(packingTable, column,
+        return sqDB.query(PACKING_TABLE, column,
                 null, null, null, null,
                 KEY_ROW_ID + " asc ");
 
@@ -704,7 +709,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String []selArgs={pItem};
         ContentValues cv = new ContentValues(2);
         cv.put("Status","no");
-        Cursor cursor= sqDB.query(packingTable, column,
+        Cursor cursor= sqDB.query(PACKING_TABLE, column,
                 null, null, null, null,
                 KEY_ROW_ID + " asc ");
 
@@ -712,7 +717,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         {
             try {
                 selArgs[0]=cursor.getString(1);
-                sqDB.update(packingTable,cv,"PackingItem=?",selArgs);
+                sqDB.update(PACKING_TABLE,cv,"PackingItem=?",selArgs);
             }
             catch (Exception e)
             {
