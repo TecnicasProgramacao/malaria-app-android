@@ -410,7 +410,7 @@ public class MalariaDatabaseTest extends AndroidTestCase {
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String formattedDate = df.format(Calendar.getInstance().getTime());
-        // formattedDate have current date/time
+        // formattedDate have current dates/time
         //Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
 
         long oneDay = 1000 * 60 * 60 * 24;
@@ -425,31 +425,31 @@ public class MalariaDatabaseTest extends AndroidTestCase {
 
         assertEquals(80.0,ar);
 
-        /*int date=22;
+        /*int dates=22;
         int month=6;
         int year=2015;
 
-        double percentage=23.00;
+        double percentages=23.00;
 
-        db.insertOrUpdateMissedMedicationEntry(date,month,year,percentage);
+        db.insertOrUpdateMissedMedicationEntry(dates,month,year,percentages);
 
-        db.updateMedicationEntry(date, month, year, "yes", percentage);
+        db.updateMedicationEntry(dates, month, year, "yes", percentages);
 
-         date=23;
+         dates=23;
          month=6;
          year=2015;
 
-         percentage=45.00;
+         percentages=45.00;
 
-        db.insertOrUpdateMissedMedicationEntry(date,month,year,percentage);
+        db.insertOrUpdateMissedMedicationEntry(dates,month,year,percentages);
 
-        db.updateMedicationEntry(date, month, year, "yes", percentage);
+        db.updateMedicationEntry(dates, month, year, "yes", percentages);
 
-        date=27;month=6;year=2015;percentage=28.00;
+        dates=27;month=6;year=2015;percentages=28.00;
 
-        db.insertOrUpdateMissedMedicationEntry(date,month,year,percentage);
+        db.insertOrUpdateMissedMedicationEntry(dates,month,year,percentages);
 
-        db.updateMedicationEntry(date, month, year, "yes", percentage);
+        db.updateMedicationEntry(dates, month, year, "yes", percentages);
         long x=0;
         db.getFirstTime();
 
@@ -471,27 +471,27 @@ public class MalariaDatabaseTest extends AndroidTestCase {
 
         assertEquals(ar,chk);
 
-        /*int date=22;
+        /*int dates=22;
         int month=6;
         int year=2015;
 
-        double percentage=23.00;
+        double percentages=23.00;
 
-        db.insertOrUpdateMissedMedicationEntry(date, month, year, percentage);
+        db.insertOrUpdateMissedMedicationEntry(dates, month, year, percentages);
 
-        db.updateMedicationEntry(date, month, year, "yes", percentage);
+        db.updateMedicationEntry(dates, month, year, "yes", percentages);
 
-        date=23;month=6;year=2015;percentage=28.00;
+        dates=23;month=6;year=2015;percentages=28.00;
 
-        db.insertOrUpdateMissedMedicationEntry(date, month, year, percentage);
+        db.insertOrUpdateMissedMedicationEntry(dates, month, year, percentages);
 
-        db.updateMedicationEntry(date,month,year,"yes",percentage);
+        db.updateMedicationEntry(dates,month,year,"yes",percentages);
 
-        date=27;month=6;year=2015;percentage=28.00;
+        dates=27;month=6;year=2015;percentages=28.00;
 
         long x=db.getFirstTime();
 
-        String date_header=""+date+"/"+month+"/"+year;
+        String date_header=""+dates+"/"+month+"/"+year;
         SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
         Date d = Calendar.getInstance().getTime();
 

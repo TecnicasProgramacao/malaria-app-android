@@ -47,7 +47,7 @@ public class TripAlarmActivity extends Activity {
                 .getSharedPreferences("com.peacecorps.malaria.storeTimePicked", Context.MODE_PRIVATE)
                 .getString("com.peacecorps.malaria.trip_date", null);
 
-        String msg= "Trip return date is : " + return_date + ".\n\n" + "Your Luggage should contain following items:-";
+        String msg= "Trip return dates is : " + return_date + ".\n\n" + "Your Luggage should contain following items:-";
 
         //setting fonts
         textView.setText(msg);

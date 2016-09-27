@@ -335,7 +335,7 @@ public class UserMedicineSettingsFragmentActivity extends FragmentActivity
      *What all it sets?
      * drug--------------->INTEGER------------>0-Malarone,1-Doxycycline,2-Melfoquine
      * isWeekly----------->BOOLEAN------------>Tells whether the drug chosen was weekly or not
-     * weeklyDate--------->LONG--------------->App registers the weekly date of Melfoquine, now this will be reminded weekly.
+     * weeklyDate--------->LONG--------------->App registers the weekly dates of Melfoquine, now this will be reminded weekly.
      * firstRunTime------->LONG--------------->First time the drug was taken.
      */
     @Override

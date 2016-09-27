@@ -63,7 +63,7 @@ public class DayFragmentActivity extends FragmentActivity {
         /*defining variables for accessing Database*/
         sqLite= new DatabaseSQLiteHelper(this);
 
-        /*displaying clicked date on the Day Fragment*/
+        /*displaying clicked dates on the Day Fragment*/
         Intent intent = getIntent();
         String selected_date = intent.getStringExtra(ThirdAnalyticFragment.DATE_TAG);
         TextView dayDB = (TextView)findViewById(R.id.dayDB);
@@ -154,12 +154,12 @@ public class DayFragmentActivity extends FragmentActivity {
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "This is a future date, you cannot edit it!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "This is a future dates, you cannot edit it!", Toast.LENGTH_LONG).show();
                     flag=1;
                 }
             }
             else {
-                //Toast.makeText(getApplicationContext(), "This is a date before medication even started, you can't edit it!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "This is a dates before medication even started, you can't edit it!", Toast.LENGTH_LONG).show();
                 Toast.makeText(getApplicationContext(), "I missed entering medicine!", Toast.LENGTH_LONG).show();
                 sqLite.insertOrUpdateMissedMedicationEntry(day, month, year, 0);
 

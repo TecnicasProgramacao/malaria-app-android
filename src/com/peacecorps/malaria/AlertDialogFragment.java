@@ -73,7 +73,7 @@ public class AlertDialogFragment extends DialogFragment {
                         if (flag == 0) {
                             if (mSharedPreferenceStore.mPrefsStore.getBoolean(
                                     "com.peacecorps.malaria.isWeekly", false)) {
-                                /**Updates the date when weekly drug was taken and set the alarm for nex weekly Date**/
+                                /**Updates the dates when weekly drug was taken and set the alarm for nex weekly Date**/
                                 saveUsersettings(true, true);
                                 DatabaseSQLiteHelper databaseSQLiteHelper = new DatabaseSQLiteHelper(getActivity());
                                 databaseSQLiteHelper.getUserMedicationSelection(getActivity(), "weekly", Calendar.getInstance().getTime(), "yes", computeAdherenceRate());

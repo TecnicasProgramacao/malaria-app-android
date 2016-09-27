@@ -448,7 +448,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
         public void onClick(View view) {
             String date_month_year = (String) view.getTag();
             //selectedDayMonthYearButton.setText(" " + date_month_year);
-            Log.e("Selected date", date_month_year);
+            Log.e("Selected dates", date_month_year);
             Date parsedDate=Calendar.getInstance().getTime();
             try {
                 parsedDate = dateFormatter.parse(date_month_year);

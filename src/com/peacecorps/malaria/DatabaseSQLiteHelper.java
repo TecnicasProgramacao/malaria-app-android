@@ -40,7 +40,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase database) {
-        /**Creating Tables**/
+        //Creating Tables
         database.execSQL("CREATE TABLE " + USER_MEDICATION_CHOICE_TABLE
                 + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, Drug INTEGER,Choice VARCHAR, "
                 + "Month VARCHAR, Year VARCHAR,Status VARCHAR,Date INTEGER, "
@@ -58,51 +58,64 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(final SQLiteDatabase database, final int oldVersion, final int newVersion) {
 
-
     }
 
-    public static ArrayList<Double> percentage;
-    public static ArrayList<Integer> date;
+    public static ArrayList<Double> percentages;
+    public static ArrayList<Integer> dates;
 
     /**Method to Update the Progress Bars**/
     public int getData(final int month, final int year, final String choice) {
 
-        percentage = new ArrayList<Double>();
-        date = new ArrayList<Integer>();
+        percentages= new ArrayList<Double>();
+        dates= new ArrayList<Integer>();
         int count = 0;
+
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+
         String column[] = {"_id", "Date", "Percentage"};
         String args[] = {"" + month, "" + year, "yes", choice};
         Cursor cursor = sqLiteDatabase.query(USER_MEDICATION_CHOICE_TABLE, column,
                 "Month =? AND Year =? AND Status =? AND Choice =?", args, null, null, "Date ASC");
+
         boolean isDataFound = false;
+
         while (cursor.moveToNext()) {
             isDataFound = true;
             count += 1;
-            date.add(cursor.getInt(1));
 
-            percentage.add(cursor.getDouble(2));
+            dates.add(cursor.getInt(1));
+            percentages.add(cursor.getDouble(2));
+
             Log.d(TAG_DATABASE_HELPER, "INSIDE GET DATA DATE: " + cursor.getInt(1));
             Log.d(TAG_DATABASE_HELPER, "INSIDE GET DATA PERCENTAGE:" + cursor.getDouble(2));
 
         }
+
         if (isDataFound) {
-            if (!(date.get(date.size() - 1) == Calendar.getInstance().get(Calendar.DATE))) {
-                percentage.add(0.0);
-                date.add(Calendar.getInstance().get(Calendar.DATE));
+            if (!(dates.get(dates.size() - 1) == Calendar.getInstance().get(Calendar.DATE))) {
+                percentages.add(0.0);
+                dates.add(Calendar.getInstance().get(Calendar.DATE));
             }
         }
+
         sqLiteDatabase.close();
         Log.d(TAG_DATABASE_HELPER, "" + count);
+
         return count;
     }
 
-    public boolean dayIsSingleDigit(final int dayOfMonth) {
-        if (dayOfMonth >= 10) {
-            return false;
+    private static final int MAX_NUMBER_WITH_ONE_DIGIT = 9;
+
+    private boolean dayIsSingleDigit(final int dayOfMonth) {
+
+        boolean dayIsSingleDigit = false;
+
+        if (dayOfMonth <= MAX_NUMBER_WITH_ONE_DIGIT) {
+            dayIsSingleDigit = true;
         } else {
-            return true;
+            dayIsSingleDigit = false;
         }
+        return dayIsSingleDigit;
     }
 
     /**Method to Update the User Selection of Medicine and it's Status of whether Medicine was taken or not.
@@ -111,9 +124,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public void getUserMedicationSelection(final Context context, final String choice, final Date date,
                                            final String status, final Double percentage) {
         ContentValues values = new ContentValues(2);
+
         Calendar calendarAux;
         calendarAux = Calendar.getInstance();
         calendarAux.setTime(date);
+
         int dayOfMonth = calendarAux.get(Calendar.DATE);
         String timeStamp = "";
 
@@ -126,6 +141,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
 
         Log.d(TAG_DATABASE_HELPER, timeStamp);
+
         values.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com.peacecorps.malaria.drug", 0));
         values.put("Choice", choice);
         values.put("Month", "" + calendarAux.get(Calendar.MONTH));
@@ -134,6 +150,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         values.put("Date", calendarAux.get(Calendar.DATE));
         values.put("Percentage", percentage);
         values.put("Timestamp", timeStamp);
+
         this.getWritableDatabase().insert(USER_MEDICATION_CHOICE_TABLE, "medication", values);
         this.getWritableDatabase().close();
     }
@@ -142,8 +159,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public void insertAppSettings(String drug, String choice, long date)
     {
         SQLiteDatabase sqDB= getWritableDatabase();
-        String [] column={"FreshInstall"};
-        ContentValues cv =new ContentValues(2);
+        String [] column = {"FreshInstall"};
+        ContentValues cv = new ContentValues(2);
         Cursor cursor=sqDB.query(APP_SETTING_TABLE,column,null,null,null,null,"_id ASC LIMIT 1");
         cursor.moveToNext();
         try {
@@ -190,7 +207,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, columns, "Month =? AND Year =? AND Choice =?", selArgs, null, null, null, null);
         int idx0,idx1,idx2;
 
-         /**Queried for a Month in an Year, stopping when the date required is found**/
+         /**Queried for a Month in an Year, stopping when the dates required is found**/
         while (cursor.moveToNext()) {
 
              idx0 = cursor.getColumnIndex("Date");
@@ -199,7 +216,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             int d= cursor.getInt(idx0);
             String ch = cursor.getString(idx2);
 
-            Log.d(TAG_DATABASE_HELPER,"Passed Date:"+date+"Found date:"+d);
+            Log.d(TAG_DATABASE_HELPER,"Passed Date:"+date+"Found dates:"+d);
 
             Log.d(TAG_DATABASE_HELPER,""+year);
 
@@ -243,7 +260,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             Choice="weekly";
         else
             Choice="daily";
-        if(date>=10)
+        if(dayIsSingleDigit(date))
             ts=""+year+"-"+month+"-"+date;
         else
             ts=""+year+"-"+month+"-0"+date;
@@ -287,7 +304,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 {
                    lim=p-ft;
                    for (int i=1;i<lim;i++)
-                   {   if((date+i)>=10)
+                   {   if(dayIsSingleDigit(date+i))
                        ts=""+year+"-"+month+"-"+(date+i);
                        else
                        ts=""+year+"-"+month+"-0"+(date+i);
@@ -394,14 +411,14 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE,column,null,null,null,null,"Timestamp DESC");
         int dosesInaRow=0,prevDate=0,currDate=0,currDateMonth=0,prevDateMonth=0,prevDateYear=0,currDateYear=0;
         String ts="";
-        /**One Iteration is done before entering the while loop for updating the previous and current date**/
+        /**One Iteration is done before entering the while loop for updating the previous and current dates**/
         if(cursor!=null) {
             cursor.moveToNext();
             if (cursor != null) {
                 try {
                     ts = cursor.getString(cursor.getColumnIndex("Timestamp"));
                     currDate = cursor.getInt(2);
-                    Log.d(TAG_DATABASE_HELPER, "curr date 1->" + ts);
+                    Log.d(TAG_DATABASE_HELPER, "curr dates 1->" + ts);
                 } catch (Exception e) {
                     return 0;
                 }
@@ -413,13 +430,13 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 }
 
                 /**Since Previous and Current Date our Updated,
-                 * Now backwards scan is done till we receive consecutive previous and current date **/
+                 * Now backwards scan is done till we receive consecutive previous and current dates **/
                 while (cursor != null && cursor.moveToNext()) {
                     currDate = cursor.getInt(2);
                     currDateMonth = cursor.getInt(3);
                     currDateYear = cursor.getInt(4);
                     ts = cursor.getString(cursor.getColumnIndex("Timestamp"));
-                    Log.d(TAG_DATABASE_HELPER, "curr date ->" + ts);
+                    Log.d(TAG_DATABASE_HELPER, "curr dates ->" + ts);
                     int parameter = Math.abs(currDate - prevDate);
                     if ((cursor.getString(0)) != null) {
                         if (currDateMonth == prevDateMonth) {
@@ -774,7 +791,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         endCal = Calendar.getInstance();
         endCal.setTime(e);
         int medDays = 0,flag=0;
-        //If working dates are same,then checking what is the day on that date.
+        //If working dates are same,then checking what is the day on that dates.
         if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
             if (startCal.get(Calendar.DAY_OF_WEEK) == weekday)
             {
@@ -782,8 +799,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 return medDays;
             }
         }
-        /*If start date is coming after end date, Then shuffling Dates and storing dates
-        by incrementing upto end date in do-while part.*/
+        /*If start dates is coming after end dates, Then shuffling Dates and storing dates
+        by incrementing upto end dates in do-while part.*/
         if (startCal.getTimeInMillis() > endCal.getTimeInMillis()) {
             startCal.setTime(e);
             endCal.setTime(s);
@@ -819,7 +836,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    /**Finding the Drugs between two dates for updaing Adherence in Day Fragment Activity of any selected date**/
+    /**Finding the Drugs between two dates for updaing Adherence in Day Fragment Activity of any selected dates**/
     public int getCountTakenBetween(Date s,Date e)
     {
         SQLiteDatabase sqDB = getWritableDatabase();

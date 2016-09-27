@@ -4,11 +4,8 @@ package com.peacecorps.malaria;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +21,7 @@ import com.jjoe64.graphview.GraphViewStyle;
 import com.jjoe64.graphview.LineGraphView;
 
 import java.util.Calendar;
-import java.util.Locale;
+
 /**Second Analytic Fragment
  * It shows the Progress Bars and Graph
  * **/
@@ -296,12 +293,12 @@ public class SecondAnalyticFragment extends Fragment {
     public void SetupAndShowGraph() {
 
 
-        GraphViewData graphViewData[] = new GraphViewData[DatabaseSQLiteHelper.date.size()];
+        GraphViewData graphViewData[] = new GraphViewData[DatabaseSQLiteHelper.dates.size()];
         String verLabels[]={"100%","50%","25%","0%"};
         //adding data
-        for (int index = 0; index < DatabaseSQLiteHelper.percentage.size(); index++) {
+        for (int index=0; index < DatabaseSQLiteHelper.percentages.size(); index++) {
 
-            graphViewData[index] = new GraphViewData(DatabaseSQLiteHelper.date.get(index), Double.parseDouble("" + DatabaseSQLiteHelper.percentage.get(index)));
+            graphViewData[index] = new GraphViewData(DatabaseSQLiteHelper.dates.get(index), Double.parseDouble("" + DatabaseSQLiteHelper.percentages.get(index)));
         }
         drugGraphSeries = new GraphViewSeries(graphViewData);
 

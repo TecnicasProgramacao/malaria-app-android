@@ -23,7 +23,7 @@ public class AlarmHandlerClass extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        /**On Receiving the call for Alarm, it sets one on the date and time specified. **/
+        /**On Receiving the call for Alarm, it sets one on the dates and time specified. **/
         PowerManager powerManager = (PowerManager) context
                 .getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(

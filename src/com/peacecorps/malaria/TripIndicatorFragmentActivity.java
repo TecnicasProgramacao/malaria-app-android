@@ -498,7 +498,7 @@ public class TripIndicatorFragmentActivity extends FragmentActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
+            // Use the current dates as the default dates in the picker
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
@@ -545,7 +545,7 @@ public class TripIndicatorFragmentActivity extends FragmentActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
+            // Use the current dates as the default dates in the picker
             final Calendar c = Calendar.getInstance();
              dep_year = c.get(Calendar.YEAR);
              dep_month = c.get(Calendar.MONTH);
