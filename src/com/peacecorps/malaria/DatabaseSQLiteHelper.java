@@ -155,47 +155,6 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         this.getWritableDatabase().close();
     }
 
-    /*Method to Be used in Future for storing appSettings directly in the Database, decreasing complexity**/
-    public void insertAppSettings(String drug, String choice, long date)
-    {
-        SQLiteDatabase sqDB= getWritableDatabase();
-        String [] column = {"FreshInstall"};
-        ContentValues cv = new ContentValues(2);
-        Cursor cursor=sqDB.query(APP_SETTING_TABLE,column,null,null,null,null,"_id ASC LIMIT 1");
-        cursor.moveToNext();
-        try {
-
-            if (cursor.getString(0).compareTo("true")==0)
-            {
-                cv.put("Drug", drug);
-                cv.put("Choice", choice);
-                cv.put("FirstTime", date);
-                Calendar c =Calendar.getInstance();
-                c.setTimeInMillis(date);
-                int w=c.get(Calendar.DAY_OF_WEEK);
-                cv.put("WeeklyDay",w);
-                cv.put("FreshInstall","true");
-                String [] args={"1"};
-                sqDB.delete(APP_SETTING_TABLE,"_id = ?",args);
-                sqDB.insert(APP_SETTING_TABLE,"settings",cv);
-            }
-
-        }
-        catch(Exception e)
-        {   cv.put("Drug", drug);
-            cv.put("Choice", choice);
-            cv.put("FirstTime", date);
-            Calendar c =Calendar.getInstance();
-            c.setTimeInMillis(date);
-            int w=c.get(Calendar.DAY_OF_WEEK);
-            cv.put("WeeklyDay", w);
-            cv.put("FreshInstall", "true");
-            String [] args={"1"};
-            sqDB.insert(APP_SETTING_TABLE,"settings",cv);
-        }
-    }
-
-
     /**Getting Medication Data of Each Day in Day Fragment Activity**/
     public String getMedicationData(int date,int month, int year) {
         SQLiteDatabase sqDB = getReadableDatabase();
