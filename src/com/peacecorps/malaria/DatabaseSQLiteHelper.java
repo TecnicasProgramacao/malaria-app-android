@@ -29,6 +29,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public static final String LOCATION = "Location";
     public static final String KEY_ROW_ID = "_id";
 
+    private static final String EMPTY_STRING = "";
+
     private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30,
             31, 30, 31};
     private final int[] daysOfMonthLeap = {31, 29, 31, 30, 31, 30, 31, 31, 30,
@@ -73,7 +75,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         String column[] = {"_id", "Date", "Percentage"};
-        String args[] = {"" + month, "" + year, "yes", choice};
+        String args[] = {EMPTY_STRING + month, EMPTY_STRING + year, "yes", choice};
         Cursor cursor = sqLiteDatabase.query(USER_MEDICATION_CHOICE_TABLE, column,
                 "Month =? AND Year =? AND Status =? AND Choice =?", args, null, null, "Date ASC");
 
@@ -99,7 +101,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
 
         sqLiteDatabase.close();
-        Log.d(TAG_DATABASE_HELPER, "" + count);
+        Log.d(TAG_DATABASE_HELPER, EMPTY_STRING + count);
 
         return count;
     }
@@ -130,22 +132,22 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         calendarAux.setTime(date);
 
         int dayOfMonth = calendarAux.get(Calendar.DATE);
-        String timeStamp = "";
+        String timeStamp = EMPTY_STRING;
 
         if (dayIsSingleDigit(dayOfMonth)) {
-            timeStamp = "" + calendarAux.get(Calendar.YEAR) + "-" + calendarAux.get(Calendar.MONTH) + "-"
-                    + calendarAux.get(Calendar.DATE);
+            timeStamp = EMPTY_STRING + calendarAux.get(Calendar.YEAR) + "-"
+                    + calendarAux.get(Calendar.MONTH) + "-" + calendarAux.get(Calendar.DATE);
         } else {
-            timeStamp = "" + calendarAux.get(Calendar.YEAR) + "-" + calendarAux.get(Calendar.MONTH) + "-0"
-                    + calendarAux.get(Calendar.DATE);
+            timeStamp = EMPTY_STRING + calendarAux.get(Calendar.YEAR) + "-"
+                    + calendarAux.get(Calendar.MONTH) + "-0" + calendarAux.get(Calendar.DATE);
         }
 
         Log.d(TAG_DATABASE_HELPER, timeStamp);
 
         values.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com.peacecorps.malaria.drug", 0));
         values.put("Choice", choice);
-        values.put("Month", "" + calendarAux.get(Calendar.MONTH));
-        values.put("Year", "" + calendarAux.get(Calendar.YEAR));
+        values.put("Month", EMPTY_STRING + calendarAux.get(Calendar.MONTH));
+        values.put("Year", EMPTY_STRING + calendarAux.get(Calendar.YEAR));
         values.put("Status", status);
         values.put("Date", calendarAux.get(Calendar.DATE));
         values.put("Percentage", percentage);
@@ -161,7 +163,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         String choice = "daily";
         String[] columns = {"_id", "Date", "Percentage", "Status"};
-        String[] selArgs = {"" + month, "" + year, choice};
+        String[] selArgs = {EMPTY_STRING + month, EMPTY_STRING + year, choice};
 
         StringBuffer buffer = new StringBuffer();
         Cursor cursor = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE, columns,
@@ -180,7 +182,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
             Log.d(TAG_DATABASE_HELPER, "Passed Date:" + date + "Found dates:" +
                     dateOfTableDatabbase);
-            Log.d(TAG_DATABASE_HELPER, "" + year);
+            Log.d(TAG_DATABASE_HELPER, EMPTY_STRING + year);
 
             if (dateOfTableDatabbase == date) {
                 buffer.append(statusQueried);
@@ -191,103 +193,113 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**Method to Modify the entry of Each Day**/
-    public void updateMedicationEntry(int date, int month, int year, String entry,double percentage){
+    public void updateMedicationEntry(final int date, final int month, final int year,
+                                      final String entry, final double percentage){
 
-        SQLiteDatabase sqDB = getReadableDatabase();
+        SQLiteDatabase systemQueryDatabase = getReadableDatabase();
         ContentValues values = new ContentValues(2);
+
         values.put("Status", entry);
         values.put("Percentage", percentage);
-        String[] args = new String[]{String.valueOf(date), String.valueOf(month),String.valueOf(year)};
+
+        String[] args = new String[]{String.valueOf(date), String.valueOf(month),
+                String.valueOf(year)};
         String[] column = {"Percentage"};
+
         /**Update is used instead of Insert, because the entry already exist**/
-        sqDB.update(USER_MEDICATION_CHOICE_TABLE, values, "Date=? AND Month=? AND YEAR=?", args);
-        Cursor cursor=sqDB.query(USER_MEDICATION_CHOICE_TABLE,column,null,null,null,null,null);
-        while(cursor.moveToNext())
-        {
+        systemQueryDatabase.update(USER_MEDICATION_CHOICE_TABLE, values, "Date=? AND Month=? " +
+                "AND YEAR=?", args);
+        Cursor cursor = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE, column, null, null,
+                null, null, null);
+
+        while (cursor.moveToNext()) {
          Log.d(TAG_DATABASE_HELPER, "Percentage:" + cursor.getDouble(0));
         }
-        sqDB.close();
-
+        systemQueryDatabase.close();
     }
 
     /*If No Entry will be found it will enter in the database, so that it can be later updated.
      * Usage is in Day Fragment Activity **/
-    public void insertOrUpdateMissedMedicationEntry(int date, int month, int year,double percentage)
-    {
-        SQLiteDatabase sqDB = this.getWritableDatabase();
-        ContentValues cv = new ContentValues(2);
-        String Choice="",ts="";
-        if(SharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",false))
-            Choice="weekly";
-        else
-            Choice="daily";
-        if(dayIsSingleDigit(date))
-            ts=""+year+"-"+month+"-"+date;
-        else
-            ts=""+year+"-"+month+"-0"+date;
+    public void insertOrUpdateMissedMedicationEntry(final int date, final int month,
+                                                    final int year, final double percentage) {
+        SQLiteDatabase systemQueryDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues(2);
+        String choice = EMPTY_STRING, dateFormation = EMPTY_STRING;
 
-        String []columns={"Status"};
-        String []selArgs= {""+date,""+month,""+year};
-        Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, columns, "Date=? AND Month =? AND Year =?", selArgs, null, null, null, null);
-        int idx0; String st=""; int flag=0;
-        while(cursor.moveToNext())
-        {
-            idx0=cursor.getColumnIndex("Status");
-            st=cursor.getString(idx0);
-            flag=1;
+        if (SharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",
+                false)) {
+            choice = "weekly";
+        }
+        else {
+            choice = "daily";
         }
 
-        Log.d(TAG_DATABASE_HELPER, "" + year);
-        if(flag==0 && st.equalsIgnoreCase(""))
-        {
-            cv.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com.peacecorps.malaria.drug", 0));
-            cv.put("Choice", Choice);
-            cv.put("Month", "" + month);
-            cv.put("Year", "" + year);
-            cv.put("Date", date);
-            cv.put("Percentage", percentage);
-            cv.put("Timestamp", ts);
-            sqDB.insert(USER_MEDICATION_CHOICE_TABLE, "medicaton", cv);
+        if (dayIsSingleDigit(date)) {
+            dateFormation = EMPTY_STRING + year + "-" + month + "-" + date;
+        }
+        else {
+            dateFormation = EMPTY_STRING + year + "-" + month + "-0" + date;
+        }
 
-            String []col ={"Date"};
-            String []arg = {""+month,""+year};
-            Cursor crsr = sqDB.query(USER_MEDICATION_CHOICE_TABLE,col,"Month =? AND Year =?",arg,null,null,"Date ASC");
-            int count=1,p,lim,ft=0;
-            while (cursor.moveToNext())
-            {
-                p = crsr.getInt(0);
-                count++;
-                if(count==1)
-                {
-                    ft=p;
-                }
-                if(count==2)
-                {
-                   lim=p-ft;
-                   for (int i=1;i<lim;i++)
-                   {   if(dayIsSingleDigit(date+i))
-                       ts=""+year+"-"+month+"-"+(date+i);
-                       else
-                       ts=""+year+"-"+month+"-0"+(date+i);
-                       cv.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com.peacecorps.malaria.drug", 0));
-                       cv.put("Choice", Choice);
-                       cv.put("Month", "" + month);
-                       cv.put("Year", "" + year);
-                       cv.put("Date", date+i);
-                       cv.put("Percentage", percentage);
-                       cv.put("Timestamp", ts);
-                       sqDB.insert(USER_MEDICATION_CHOICE_TABLE, "medicaton", cv);
+        String []columns = {"Status"};
+        String []selArgs = {EMPTY_STRING + date, EMPTY_STRING + month, EMPTY_STRING + year};
+
+        Cursor cursor = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE, columns,
+                "Date=? AND Month =? AND Year =?", selArgs, null, null, null, null);
+
+        int statusQueried;
+        boolean hasStatus = false;
+        String lastStatus = EMPTY_STRING;
+
+        while (cursor.moveToNext()) {
+            statusQueried = cursor.getColumnIndex("Status");
+            lastStatus = cursor.getString(statusQueried);
+            hasStatus = true;
+        }
+
+        Log.d(TAG_DATABASE_HELPER, EMPTY_STRING + year);
+
+        if (!hasStatus && lastStatus.equalsIgnoreCase(EMPTY_STRING)) {
+            contentValues.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com.peacecorps." +
+                    "malaria.drug", 0));
+            contentValues.put("Choice", choice);
+            contentValues.put("Month", EMPTY_STRING + month);
+            contentValues.put("Year", EMPTY_STRING + year);
+            contentValues.put("Date", date);
+            contentValues.put("Percentage", percentage);
+            contentValues.put("Timestamp", dateFormation);
+
+            systemQueryDatabase.insert(USER_MEDICATION_CHOICE_TABLE, "medicaton", contentValues);
+
+            String []col = {"Date"};
+            String []arg = {EMPTY_STRING + month, EMPTY_STRING + year};
+            Cursor cursorNoHaveStatus = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE,
+                    col, "Month =? AND Year =?", arg, null, null, "Date ASC");
+
+            while (cursor.moveToNext()) {
+                int lim = cursorNoHaveStatus.getInt(0);
+
+                for (int i = 1; i < lim; i++) {
+                   if (dayIsSingleDigit(date + i)) {
+                       dateFormation = EMPTY_STRING + year + "-" + month + "-" + (date + i);
                    }
-
-                }
-
+                   else {
+                       dateFormation = EMPTY_STRING + year + "-" + month + "-0" + (date + i);
+                   }
+                   contentValues.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com." +
+                           "peacecorps.malaria.drug", 0));
+                   contentValues.put("Choice", choice);
+                   contentValues.put("Month", EMPTY_STRING + month);
+                   contentValues.put("Year", EMPTY_STRING + year);
+                   contentValues.put("Date", date + i);
+                   contentValues.put("Percentage", percentage);
+                   contentValues.put("Timestamp", dateFormation);
+                   systemQueryDatabase.insert(USER_MEDICATION_CHOICE_TABLE, "medicaton",
+                           contentValues);
+               }
             }
-
-
-
         }
-        sqDB.close();
-
+        systemQueryDatabase.close();
     }
 
     /*Is Entered is Used for Getting the Style of Each Calendar Grid Cell According to the Medication Status Taken or Not Taken*/
