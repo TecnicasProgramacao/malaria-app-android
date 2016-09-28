@@ -156,35 +156,37 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**Getting Medication Data of Each Day in Day Fragment Activity**/
-    public String getMedicationData(int date,int month, int year) {
-        SQLiteDatabase sqDB = getReadableDatabase();
-        String choice ="daily";
+    public String getMedicationData(final int date, final int month, final int year) {
+        SQLiteDatabase systemQueryDatabase = getReadableDatabase();
+
+        String choice = "daily";
         String[] columns = {"_id", "Date", "Percentage", "Status"};
         String[] selArgs = {"" + month, "" + year, choice};
 
         StringBuffer buffer = new StringBuffer();
-        Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, columns, "Month =? AND Year =? AND Choice =?", selArgs, null, null, null, null);
-        int idx0,idx1,idx2;
+        Cursor cursor = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE, columns,
+                "Month =? AND Year " + "=? AND Choice =?", selArgs, null, null, null, null);
 
-         /**Queried for a Month in an Year, stopping when the dates required is found**/
+        int columnOfDate, columnStatus;
+
+        /**Queried for a Month in an Year, stopping when the dates required is found**/
         while (cursor.moveToNext()) {
 
-             idx0 = cursor.getColumnIndex("Date");
-             idx1 = cursor.getColumnIndex("Percentage");
-             idx2 = cursor.getColumnIndex("Status");
-            int d= cursor.getInt(idx0);
-            String ch = cursor.getString(idx2);
+            columnOfDate = cursor.getColumnIndex("Date");
+            columnStatus = cursor.getColumnIndex("Status");
 
-            Log.d(TAG_DATABASE_HELPER,"Passed Date:"+date+"Found dates:"+d);
+            int dateOfTableDatabbase = cursor.getInt(columnOfDate);
+            String statusQueried = cursor.getString(columnStatus);
 
-            Log.d(TAG_DATABASE_HELPER,""+year);
+            Log.d(TAG_DATABASE_HELPER, "Passed Date:" + date + "Found dates:" +
+                    dateOfTableDatabbase);
+            Log.d(TAG_DATABASE_HELPER, "" + year);
 
-            if(d==date)
-            {
-                buffer.append(ch);
+            if (dateOfTableDatabbase == date) {
+                buffer.append(statusQueried);
             }
         }
-        sqDB.close();
+        systemQueryDatabase.close();
         return buffer.toString();
     }
 
