@@ -53,16 +53,32 @@ public class AlertCallerFragmentActivity extends FragmentActivity {
 
     }
 
-    public long checkDrugTakenTimeInterval(String time) {
+    /**
+     * Finding the interval between Date when last drug was taken and Today.
+     *
+     * @param time
+     */
+    public long checkDrugTakenTimeInterval(final String time) throws IllegalArgumentException {
 
-        /**Finding the interval between Date when last drug was taken and Today.**/
-        long interval = 0;
-        long today = new Date().getTime();
-        long takenDate = mSharedPreferenceStore.mPrefsStore.getLong("com.peacecorps.malaria."
-                + time, 0);
-        long oneDay = 1000 * 60 * 60 * 24;
-        interval = (today - takenDate) / oneDay;
-        return interval;
+        if(time != null && !time.isEmpty()) {
+
+            long interval = 0;
+            long today = new Date().getTime();
+            long takenDate = mSharedPreferenceStore.mPrefsStore.getLong("com.peacecorps.malaria."
+                    + time, 0);
+
+            final long HOURS_IN_A_DAY = 24;
+            final long MINUTES_IN_A_HOUR = 60;
+            final long SECONDS_IN_A_MINUTE = 60;
+            final long MEDIAN_WEIGHT = 1000;
+
+            long oneDay = MEDIAN_WEIGHT * SECONDS_IN_A_MINUTE * MINUTES_IN_A_HOUR * HOURS_IN_A_DAY;
+            interval = (today - takenDate) / oneDay;
+
+            return interval;
+        }else {
+            throw new IllegalArgumentException("String time is null or empty");
+        }
 
     }
 
