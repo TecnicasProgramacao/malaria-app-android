@@ -7,10 +7,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.Button;
 
 public class AlertCallerFragmentActivity extends FragmentActivity {
     static SharedPreferenceStore mSharedPreferenceStore;
+
+    private static final String TAG = "AlertCallerFragment";
+
+
     /**Calls the Alert Dialog as fragment of Home Screen**/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +69,12 @@ public class AlertCallerFragmentActivity extends FragmentActivity {
 
             long interval = 0;
             long today = new Date().getTime();
+            Log.d(TAG, "Today = " + Long.toString(today));
+
             long takenDate = mSharedPreferenceStore.mPrefsStore.getLong("com.peacecorps.malaria."
                     + time, 0);
+
+            Log.d(TAG, "Drug taken time = " + Long.toString(takenDate));
 
             final long HOURS_IN_A_DAY = 24;
             final long MINUTES_IN_A_HOUR = 60;
