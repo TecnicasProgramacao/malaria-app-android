@@ -144,23 +144,30 @@ public class FirstAnalyticFragment extends Fragment {
         }
     }
 
-    public void updateAdherence(){
-
-        /**Calculating Adherence**/
-        long interval = checkDrugTakenTimeInterval("firstRunTime");
+    public void updateAdherence() {
         DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
+
         long takenCount = sqLite.getCountTaken();
-        double adherenceRate;
+
+
         Log.d(TAGFAF,"taken Count:"+takenCount);
-        if(interval!=1)
-            adherenceRate = ((double)takenCount / (double)interval) * 100;
-        else
-            adherenceRate = 100;
 
-        String ar = String.format("%.2f %%", adherenceRate);
-        Log.d(TAGFAF,"Adherence Rate:"+ar);
-        //adherence.setText(ar);
+        final long interval = checkDrugTakenTimeInterval("firstRunTime");
+        Log.d(TAGFAF, "Interval = =" + interval);
+        assert interval != 0 : "Interval is equal to 0";
 
+        final int PERCENTAGE = 100; // Adherence rate will be shown as percentage.
+        double adherenceRate = -1.0;
+        if(interval != 1) {
+            adherenceRate = ((double) takenCount / (double) interval) * PERCENTAGE;
+        }
+        else {
+            adherenceRate = PERCENTAGE;
+        }
+        assert adherenceRate >= 0.0 : "Adherence rate is negative";
+
+        String adherenceRateTwoDecimals = String.format("%.2f %%", adherenceRate);
+        Log.d(TAGFAF,"Adherence Rate = " + adherenceRateTwoDecimals);
     }
 
     public void updateDoses()
