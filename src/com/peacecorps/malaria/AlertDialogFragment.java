@@ -264,20 +264,23 @@ public class AlertDialogFragment extends DialogFragment {
         mDrugRejectedCount = mSharedPreferenceStore.mPrefsStore.getInt(
                 "com.peacecorps.malaria.drugRejectedCount", 0);
 
-        Calendar c = Calendar.getInstance();
-        int d = c.get(Calendar.DATE);
-        int m = c.get(Calendar.MONTH);
-        int y = c.get(Calendar.YEAR);
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DATE);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
         DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
-        if(sqLite.getStatus(d,m,y).equalsIgnoreCase("yes")==true)
-        {
-            flag=1;
+        final String sqLiteStatus = sqLite.getStatus(day, month, year);
+
+        if(sqLiteStatus.equalsIgnoreCase("yes") == true) {
+            flag = 1;
         }
-        else if (sqLite.getStatus(d,m,y).equalsIgnoreCase("no")==true) {
+        else if (sqLiteStatus.equalsIgnoreCase("no") == true) {
             flag = 2;
         }
-        else
-             flag=0;
+        else {
+            flag = 0;
+        }
 
     }
 
