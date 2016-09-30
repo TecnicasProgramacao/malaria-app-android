@@ -29,11 +29,18 @@ public class AlertCallerFragmentActivity extends FragmentActivity {
 
                 String weeklyDate = "weeklyDate";
                 getSharedPreferences();
-                if (mSharedPreferenceStore.mPrefsStore.getBoolean(
-                        "com.peacecorps.malaria.isWeekly", false)) {
+
+                if(mSharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly", false)) {
+
+                    final long drugTakenTimeInterval = checkDrugTakenTimeInterval(weeklyDate);
+
+                    Log.d(TAG, "Drug taken time interval = " + Long.toString(drugTakenTimeInterval));
+                    assert (drugTakenTimeInterval >= 0) : ("Drug taken time interval is negative.");
+                    assert (drugTakenTimeInterval <= 7) : ("Drug taken time interval is bigger than the days in a week (7).");
+
                     /**Weekly Day has reached, now Alarm will remind for Pill**/
-                    if (checkDrugTakenTimeInterval(weeklyDate) == 0
-                            || checkDrugTakenTimeInterval(weeklyDate) >= 7) {
+                    final int DAYS_IN_A_WEEK = 7;
+                    if (drugTakenTimeInterval == 0 || drugTakenTimeInterval == DAYS_IN_A_WEEK) {
                         callAlarm();
                     } else {
                         finish();
