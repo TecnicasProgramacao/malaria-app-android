@@ -52,8 +52,8 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
     private static final String dateTemplate = "MMMM yyyy";
     DatabaseSQLiteHelper dbSQLH = new DatabaseSQLiteHelper(this);
 
-    final int JANUARY = 1;
-    final int DECEMBER = 12;
+    private final int JANUARY = 1;
+    private final int DECEMBER = 12;
 
 
     /** Called when the activity is first created. */
