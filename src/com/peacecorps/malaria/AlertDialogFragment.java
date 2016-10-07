@@ -328,7 +328,12 @@ public class AlertDialogFragment extends DialogFragment {
         Log.d("AlarmService", "Notification sent.");
     }
 
-    public double computeAdherenceRate() {
+    /**
+     * Computes adhrecence rate in percentage, according to drug taken interval
+     *
+     * @return
+     */
+    private double computeAdherenceRate() {
         DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
         final long takenCount = sqLite.getCountTaken();
 
@@ -337,7 +342,7 @@ public class AlertDialogFragment extends DialogFragment {
         assert interval != 0 : "Interval is equal to 0";
 
         final int PERCENTAGE = 100; // Adherence rate will be shown as percentage.
-        final double adherenceRate = ((double)takenCount / (double)interval) * PERCENTAGE; // In percentage.
+        final double adherenceRate = ((double) takenCount / (double) interval) * PERCENTAGE; // In percentage.
         Log.d(TAGADF, "adherence:" + adherenceRate);
         return adherenceRate;
     }
