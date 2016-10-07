@@ -134,8 +134,6 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
      */
     @Override
     public void onClick(View view) {
-
-
         // Preconditon
         assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
 
@@ -143,15 +141,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
             setPreviousMonth();
         }
         if(view == nextMonth) {
-            if(month >= DECEMBER) { // Next month is in the next year.
-                month = JANUARY;
-                year++;
-            } else {
-                month++; // Next month is in the current year.
-            }
-            Log.d(tag, "Setting Next Month in GridCellAdapter: " + "Month: "
-                    + month + " Year: " + year);
-            setGridCellAdapterToDate(month, year);
+            setNextMonth();
         }
 
         // Postcondition
@@ -521,6 +511,21 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
             month--; // Previous month is in the current year.
         }
         Log.d(tag, "Setting Prev Month in GridCellAdapter: " + "Month: "
+                + month + " Year: " + year);
+        setGridCellAdapterToDate(month, year);
+    }
+
+    /**
+     * Calculates the next month, according to the current month.
+     */
+    private void setNextMonth() {
+        if(month >= DECEMBER) { // Next month is in the next year.
+            month = JANUARY;
+            year++;
+        } else {
+            month++; // Next month is in the current year.
+        }
+        Log.d(tag, "Setting Next Month in GridCellAdapter: " + "Month: "
                 + month + " Year: " + year);
         setGridCellAdapterToDate(month, year);
     }
