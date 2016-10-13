@@ -137,9 +137,11 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
         // Preconditon
         assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
 
+        // Current month should be changed to it's previous month
         if(view == prevMonth) {
             setPreviousMonth();
         }
+        // Current month should be changed to it's next month
         if(view == nextMonth) {
             setNextMonth();
         }
