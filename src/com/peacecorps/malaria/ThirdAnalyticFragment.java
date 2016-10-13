@@ -135,7 +135,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
     @Override
     public void onClick(View view) {
         // Preconditon
-        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
+        assertMonthIsValid(month);
 
         // Current month should be changed to it's previous month
         if(view == prevMonth) {
@@ -147,7 +147,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
         }
 
         // Postcondition
-        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
+        assertMonthIsValid(month);
     }
 
         @Override
@@ -230,6 +230,31 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
             }
 
             /**
+             * Returns the next month of the year according to the current month.
+             * @param currentMonth
+             * @return next month of the year
+             */
+            private int getNextMonth(final int currentMonth) {
+                int nextMonth = -1;
+
+                // Precondition.
+                assertMonthIsValid(currentMonth);
+
+                // Next month lies on the current year.
+                if(currentMonth != DECEMBER) {
+                    nextMonth = currentMonth + 1;
+                }
+                else { // Next month lies on the next year.
+                    nextMonth = JANUARY;
+                }
+
+                //Post condition.
+                assertMonthIsValid(nextMonth);
+
+                return nextMonth;
+            }
+
+            /**
              * Prints Month
              *
              * @param mm
@@ -257,7 +282,9 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                 if (currentMonth == 11) {
                     prevMonth = currentMonth - 1;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
-                    nextMonth = 0;
+
+                    nextMonth = getNextMonth(currentMonth);
+
                     prevYear = yy;
                     nextYear = yy + 1;
                     Log.d(tag, "*->PrevYear: " + prevYear + " PrevMonth:"
@@ -268,13 +295,13 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                     prevYear = yy - 1;
                     nextYear = yy;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
-                    nextMonth = 1;
+                    nextMonth = getNextMonth(currentMonth);
                     Log.d(tag, "**--> PrevYear: " + prevYear + " PrevMonth:"
                             + prevMonth + " NextMonth: " + nextMonth
                             + " NextYear: " + nextYear);
                 } else {
                     prevMonth = currentMonth - 1;
-                    nextMonth = currentMonth + 1;
+                    nextMonth = getNextMonth(currentMonth);
                     nextYear = yy;
                     prevYear = yy;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
@@ -530,5 +557,13 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
         Log.d(tag, "Setting Next Month in GridCellAdapter: " + "Month: "
                 + month + " Year: " + year);
         setGridCellAdapterToDate(month, year);
+    }
+
+    /**
+     * Assert that month is between JANUARY and DECEMBER.
+     * @param month
+     */
+    private void assertMonthIsValid(final int month) {
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
     }
 }
