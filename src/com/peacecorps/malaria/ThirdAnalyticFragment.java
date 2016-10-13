@@ -230,31 +230,6 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
             }
 
             /**
-             * Returns the next month of the year according to the current month.
-             * @param currentMonth
-             * @return next month of the year
-             */
-            private int getNextMonth(final int currentMonth) {
-                int nextMonth = -1;
-
-                // Precondition.
-                assertMonthIsValid(currentMonth);
-
-                // Next month lies on the current year.
-                if(currentMonth != DECEMBER) {
-                    nextMonth = currentMonth + 1;
-                }
-                else { // Next month lies on the next year.
-                    nextMonth = JANUARY;
-                }
-
-                //Post condition.
-                assertMonthIsValid(nextMonth);
-
-                return nextMonth;
-            }
-
-            /**
              * Prints Month
              *
              * @param mm
@@ -565,5 +540,30 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
      */
     private void assertMonthIsValid(final int month) {
         assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
+    }
+
+    /**
+     * Returns the next month of the year according to the current month.
+     * @param currentMonth
+     * @return next month of the year
+     */
+    private int getNextMonth(final int currentMonth) {
+        // Precondition.
+        assertMonthIsValid(currentMonth);
+
+        int nextMonth = -1; // Next month of the year.
+
+        // Next month lies on the current year.
+        if(currentMonth != DECEMBER) {
+            nextMonth = currentMonth + 1;
+        }
+        else { // Next month lies on the next year.
+            nextMonth = JANUARY;
+        }
+
+        //Post condition.
+        assertMonthIsValid(nextMonth);
+
+        return nextMonth;
     }
 }
