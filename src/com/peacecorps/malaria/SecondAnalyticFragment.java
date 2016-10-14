@@ -29,7 +29,10 @@ public class SecondAnalyticFragment extends Fragment {
 
     private TextView firstMonthProgressLabel, secondMonthProgressLabel, thirdMonthProgressLabel, fourthMonthProgressLabel;
     private TextView firstMonthProgressPercent, secondMonthProgressPercent, thirdMonthProgressPercent, fourthMonthProgressPercent;
+
+    // These bars represent the progress of drug taking over months, in percent [0, 100]
     private ProgressBar firstMonthProgressBar, secondMonthProgressBar, thirdMonthProgressBar, fourthMonthProgressBar;
+
     private Button mSettingsButton;
     private View rootView;
     public final static String MONTH_REQ = "com.peacecorps.malaria.secondanalyticfragment.MONTHREQ";
@@ -106,6 +109,7 @@ public class SecondAnalyticFragment extends Fragment {
     //finding month from its integer
     public String getMonth(int date) {
         String month[] = getResources().getStringArray(R.array.month);
+
         if (date == -1) {
             date = 11;
             myear = Calendar.getInstance().get(Calendar.YEAR) - 1;
