@@ -68,8 +68,11 @@ public class HTTPAsyncTask extends AsyncTask<String, Void, String> {
                     URL url = new URL("http://pc-web-dev.systers.org");
                     HttpURLConnection urlc = (HttpURLConnection) url
                             .openConnection();
-                    urlc.setConnectTimeout(4000);
+
+                    final int MAX_WAITING_TIME = 4000; // Timeout in microseconds.
+                    urlc.setConnectTimeout(MAX_WAITING_TIME);
                     urlc.connect();
+
                     if (urlc.getResponseCode() == 200) {
                         return true;
                     }
