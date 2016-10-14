@@ -259,6 +259,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
 
                     nextMonth = getNextMonth(currentMonth);
+                    assertMonthIsValid(nextMonth);
 
                     prevYear = yy;
                     nextYear = yy + 1;
@@ -270,13 +271,19 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                     prevYear = yy - 1;
                     nextYear = yy;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
+
                     nextMonth = getNextMonth(currentMonth);
+                    assertMonthIsValid(nextMonth);
+
                     Log.d(tag, "**--> PrevYear: " + prevYear + " PrevMonth:"
                             + prevMonth + " NextMonth: " + nextMonth
                             + " NextYear: " + nextYear);
                 } else {
                     prevMonth = currentMonth - 1;
+
                     nextMonth = getNextMonth(currentMonth);
+                    assertMonthIsValid(nextMonth);
+                    
                     nextYear = yy;
                     prevYear = yy;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
