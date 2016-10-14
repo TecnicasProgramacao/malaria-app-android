@@ -254,6 +254,12 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                 GregorianCalendar cal = new GregorianCalendar(yy, currentMonth, 1);
                 Log.d(tag, "Gregorian Calendar:= " + cal.getTime().toString());
 
+                /* Updating to next or previous month and year, according to the case.
+                 * Handling cases where the next mont is on the next year, or previous month is on the previous year.
+                 *
+                 * Example: next month of DECEMBER 2016 is JANUARY 2017
+                 *          previous month of JANUARY 2014 is DECEMBER 2013
+                 */
                 if (currentMonth == 11) {
                     prevMonth = currentMonth - 1;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
