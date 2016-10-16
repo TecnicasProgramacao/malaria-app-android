@@ -52,6 +52,9 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
     private static final String dateTemplate = "MMMM yyyy";
     DatabaseSQLiteHelper dbSQLH = new DatabaseSQLiteHelper(this);
 
+    private final int JANUARY = 1;
+    private final int DECEMBER = 12;
+
 
     /** Called when the activity is first created. */
     @Override
@@ -131,38 +134,21 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
      */
     @Override
     public void onClick(View view) {
-        final int JANUARY = 1;
-        final int DECEMBER = 12;
-
         // Preconditon
-        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
+        assertMonthIsValid(month);
 
+        // Current month should be changed to it's previous month
         if(view == prevMonth) {
-            if(month <= JANUARY) { // Previous month is in the last year.
-                month = DECEMBER;
-                year--;
-            } else {
-                month--; // Previous month is in the current year.
-            }
-            Log.d(tag, "Setting Prev Month in GridCellAdapter: " + "Month: "
-                    + month + " Year: " + year);
-            setGridCellAdapterToDate(month, year);
+            setPreviousMonth();
         }
+        // Current month should be changed to it's next month
         if(view == nextMonth) {
-            if(month >= DECEMBER) { // Next month is in the next year.
-                month = JANUARY;
-                year++;
-            } else {
-                month++; // Next month is in the current year.
-            }
-            Log.d(tag, "Setting Next Month in GridCellAdapter: " + "Month: "
-                    + month + " Year: " + year);
-            setGridCellAdapterToDate(month, year);
+            setNextMonth();
         }
 
         // Postcondition
-        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+        assertMonthIsValid(month);
+    }
 
         @Override
         public void onDestroy() {
@@ -268,10 +254,19 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                 GregorianCalendar cal = new GregorianCalendar(yy, currentMonth, 1);
                 Log.d(tag, "Gregorian Calendar:= " + cal.getTime().toString());
 
+                /* Updating to next or previous month and year, according to the case.
+                 * Handling cases where the next mont is on the next year, or previous month is on the previous year.
+                 *
+                 * Example: next month of DECEMBER 2016 is JANUARY 2017
+                 *          previous month of JANUARY 2014 is DECEMBER 2013
+                 */
                 if (currentMonth == 11) {
                     prevMonth = currentMonth - 1;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
-                    nextMonth = 0;
+
+                    nextMonth = getNextMonth(currentMonth);
+                    assertMonthIsValid(nextMonth);
+
                     prevYear = yy;
                     nextYear = yy + 1;
                     Log.d(tag, "*->PrevYear: " + prevYear + " PrevMonth:"
@@ -282,13 +277,19 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                     prevYear = yy - 1;
                     nextYear = yy;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
-                    nextMonth = 1;
+
+                    nextMonth = getNextMonth(currentMonth);
+                    assertMonthIsValid(nextMonth);
+
                     Log.d(tag, "**--> PrevYear: " + prevYear + " PrevMonth:"
                             + prevMonth + " NextMonth: " + nextMonth
                             + " NextYear: " + nextYear);
                 } else {
                     prevMonth = currentMonth - 1;
-                    nextMonth = currentMonth + 1;
+
+                    nextMonth = getNextMonth(currentMonth);
+                    assertMonthIsValid(nextMonth);
+                    
                     nextYear = yy;
                     prevYear = yy;
                     daysInPrevMonth = getNumberOfDaysOfMonth(prevMonth);
@@ -514,5 +515,68 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
 
         }
 
+    }
+
+    /**
+     * Calculates the preivous month, according to the current month.
+     */
+    private void setPreviousMonth() {
+        if(month <= JANUARY) { // Previous month is in the last year.
+            month = DECEMBER;
+            year--;
+        } else {
+            month--; // Previous month is in the current year.
+        }
+        Log.d(tag, "Setting Prev Month in GridCellAdapter: " + "Month: "
+                + month + " Year: " + year);
+        setGridCellAdapterToDate(month, year);
+    }
+
+    /**
+     * Calculates the next month, according to the current month.
+     */
+    private void setNextMonth() {
+        if(month >= DECEMBER) { // Next month is in the next year.
+            month = JANUARY;
+            year++;
+        } else {
+            month++; // Next month is in the current year.
+        }
+        Log.d(tag, "Setting Next Month in GridCellAdapter: " + "Month: "
+                + month + " Year: " + year);
+        setGridCellAdapterToDate(month, year);
+    }
+
+    /**
+     * Assert that month is between JANUARY and DECEMBER.
+     * @param month
+     */
+    private void assertMonthIsValid(final int month) {
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
+    }
+
+    /**
+     * Returns the next month of the year according to the current month.
+     * @param currentMonth
+     * @return next month of the year
+     */
+    private int getNextMonth(final int currentMonth) {
+        // Precondition.
+        assertMonthIsValid(currentMonth);
+
+        int nextMonth = -1; // Next month of the year.
+
+        // Next month lies on the current year.
+        if(currentMonth != DECEMBER) {
+            nextMonth = currentMonth + 1;
+        }
+        else { // Next month lies on the next year.
+            nextMonth = JANUARY;
+        }
+
+        //Post condition.
+        assertMonthIsValid(nextMonth);
+
+        return nextMonth;
     }
 }

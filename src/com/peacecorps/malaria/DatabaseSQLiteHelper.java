@@ -107,23 +107,6 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    private static final int MAX_NUMBER_WITH_ONE_DIGIT = 9;
-
-    private boolean dayIsSingleDigit(final int dayOfMonth) {
-
-        //1~31 valid day intervals for one month
-        assert dayOfMonth >= 1 && dayOfMonth <= 31;
-
-        boolean dayIsSingleDigit = false;
-
-        if (dayOfMonth <= MAX_NUMBER_WITH_ONE_DIGIT) {
-            dayIsSingleDigit = true;
-        } else {
-            dayIsSingleDigit = false;
-        }
-        return dayIsSingleDigit;
-    }
-
     /**Method to Update the User Selection of Medicine and it's Status of whether Medicine was taken or not.
      * Used in Alert Dialog to Directly update the current Status
      * Used in Home Screen Fragment for updating the current status through tick marks**/
@@ -941,5 +924,19 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
         sqDB.close();
         return count;
+    }
+
+    private static final int MAX_NUMBER_WITH_ONE_DIGIT = 9;
+
+    private boolean dayIsSingleDigit(final int dayOfMonth) {
+
+        boolean dayIsSingleDigit = false;
+
+        if (dayOfMonth <= MAX_NUMBER_WITH_ONE_DIGIT) {
+            dayIsSingleDigit = true;
+        } else {
+            dayIsSingleDigit = false;
+        }
+        return dayIsSingleDigit;
     }
 }
