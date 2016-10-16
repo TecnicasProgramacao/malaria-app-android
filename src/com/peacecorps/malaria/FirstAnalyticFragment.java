@@ -38,45 +38,52 @@ public class FirstAnalyticFragment extends Fragment {
 
         //declaring views
         mSettingsButton = (Button) rootView.findViewById(R.id.fragment_first_screen_settings_button);
+
         checkMediLastTakenTime = (TextView) rootView.findViewById(R.id.checkMediLastTakenTime);
         doses = (TextView) rootView.findViewById(R.id.doses);
         adherence = (TextView) rootView.findViewById(R.id.adherence);
+
         updateUI();
+
         TextView mlt, dinr, atm;
-        mlt=(TextView)rootView.findViewById(R.id.mlt);
-        dinr=(TextView)rootView.findViewById(R.id.dinr);
-        atm=(TextView)rootView.findViewById(R.id.atm);
+        mlt = (TextView) rootView.findViewById(R.id.mlt);
+        dinr = (TextView) rootView.findViewById(R.id.dinr);
+        atm = (TextView) rootView.findViewById(R.id.atm);
+
         //setting fonts
         Typeface cf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/garreg.ttf");
         Typeface cfb = Typeface.createFromAsset(getActivity().getAssets(), "fonts/garbold.ttf");
+
         mlt.setTypeface(cf);
         dinr.setTypeface(cf);
         atm.setTypeface(cf);
 
-
         return rootView;
-
     }
 
     @Override
     public void onResume(){
         updateUI();
         super.onResume();
-
     }
 
     public void updateUI(){
-
         //calling functions
         updateMediLastTime();
-        Log.d(TAGFAF,"AFTER CHK MEDI LAST TIME");
-        if (checkMediLastTakenTime != null)
+        Log.d(TAGFAF, "AFTER CHK MEDI LAST TIME");
+
+        if (checkMediLastTakenTime != null) {
             updateDoses();
+        }
+
         Log.d(TAGFAF, "AFTER UPDATE DOSES");
+
         updateAdherence();
         Log.d(TAGFAF, "AFTER UPDATE ADHERENCE");
+
         getSharedPreferences();
         Log.d(TAGFAF, "AFTER SHARED PREFS");
+
         addButtonListeners();
         Log.d(TAGFAF, "AFTER BUTTON LISTENERS");
     }
@@ -84,18 +91,14 @@ public class FirstAnalyticFragment extends Fragment {
 
     public void addButtonListeners() {
         mSettingsButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
                 addDialog();
-
             }
         });
     }
 
     public void getSharedPreferences() {
-
         mSharedPreferenceStore.mPrefsStore = getActivity()
                 .getSharedPreferences("com.peacecorps.malaria.storeTimePicked",
                         Context.MODE_PRIVATE);
@@ -103,40 +106,48 @@ public class FirstAnalyticFragment extends Fragment {
                 .edit();
     }
 
-
     public long checkDrugTakenTimeInterval(String time) {
         //finding the interval of time between today and the 'time'
         long interval = 0;
+
         long today = new Date().getTime();
-        Date tdy= Calendar.getInstance().getTime();
+        Date tdy = Calendar.getInstance().getTime();
         tdy.setTime(today);
-        DatabaseSQLiteHelper sqLite= new DatabaseSQLiteHelper(getActivity());
+
+        DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
         long takenDate= sqLite.getFirstTime();
-        if(time.compareTo("firstRunTime")==0) {
-            if(takenDate!=0) {
+
+        if (time.compareTo("firstRunTime") == 0) {
+            if (takenDate != 0) {
                 Log.d(TAGFAF, "First Run Time at FAF->" + takenDate);
-                Calendar cal=Calendar.getInstance();
+
+                Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(takenDate);
                 cal.add(Calendar.MONTH, 1);
-                Date start=cal.getTime();
-                int weekDay=cal.get(Calendar.DAY_OF_WEEK);
+
+                Date start = cal.getTime();
+                int weekDay = cal.get(Calendar.DAY_OF_WEEK);
+
                 //calaculating no. of weekdays for weekly drug
-                if(SharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",false))
-                    interval=sqLite.getIntervalWeekly(start,tdy,weekDay);
-                else
-                    interval=sqLite.getIntervalDaily(start,tdy);
+                if (SharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",
+                        false)) {
+                    interval = sqLite.getIntervalWeekly(start, tdy, weekDay);
+                } else {
+                    interval = sqLite.getIntervalDaily(start, tdy);
+                }
+
                 //^for daily drug only the no. of days
                 SharedPreferenceStore.mEditor.putLong("com.peacecorps.malaria."
                         + time, takenDate).apply();
                 return interval;
-            }
-            else
+            } else {
                 return 1;
-        }
-        else {
-            takenDate=SharedPreferenceStore.mPrefsStore.getLong("com.peacecorps.malaria."
+            }
+        } else {
+            takenDate = SharedPreferenceStore.mPrefsStore.getLong("com.peacecorps.malaria."
                     + time, takenDate);
             long oneDay = 1000 * 60 * 60 * 24;
+
             interval = (today - takenDate) / oneDay;
             return interval;
         }
@@ -146,9 +157,7 @@ public class FirstAnalyticFragment extends Fragment {
         DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
 
         long takenCount = sqLite.getCountTaken();
-
-
-        Log.d(TAGFAF,"taken Count:"+takenCount);
+        Log.d(TAGFAF, "taken Count:" + takenCount);
 
         final long interval = checkDrugTakenTimeInterval("firstRunTime");
         Log.d(TAGFAF, "Interval = =" + interval);
@@ -162,24 +171,26 @@ public class FirstAnalyticFragment extends Fragment {
         else {
             adherenceRate = PERCENTAGE;
         }
+
         assert adherenceRate >= 0.0 : "Adherence rate is negative";
 
         String adherenceRateTwoDecimals = String.format("%.2f %%", adherenceRate);
         Log.d(TAGFAF,"Adherence Rate = " + adherenceRateTwoDecimals);
     }
 
-    public void updateDoses()
-    {
+    public void updateDoses() {
+        Log.d(TAGFAF, "INSIDE updateDoses");
+
         /*Updating Doses in a Row for Weekly and Daily Pill Seperately*/
         DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
-        Log.d(TAGFAF, "INSIDE updateDoses");
-        if(mSharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",false)) {
+
+        if (mSharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",
+                false)) {
             int d = sqLite.getDosesInaRowWeekly();
+
             mSharedPreferenceStore.mEditor.putInt("com.peacecorps.malaria.weeklyDose", d).apply();
             doses.setText("" + d/*mSharedPreferenceStore.mPrefsStore.getInt("com.peacecorps.malaria.weeklyDose", 0)*/);
-        }
-        else
-        {
+        } else {
             int d = sqLite.getDosesInaRowDaily();
             mSharedPreferenceStore.mEditor.putInt("com.peacecorps.malaria.dailyDose",d).apply();
             doses.setText("" + mSharedPreferenceStore.mPrefsStore.getInt("com.peacecorps.malaria.dailyDose", 0));
@@ -189,7 +200,8 @@ public class FirstAnalyticFragment extends Fragment {
     public void updateMediLastTime() {
         /*Updating the most recent time medication was taken*/
         if (checkMediLastTakenTime != null) {
-            checkMediLastTakenTime.setText(mSharedPreferenceStore.mPrefsStore.getString("com.peacecorps.malaria.checkMediLastTakenTime", "").toString());
+            checkMediLastTakenTime.setText(mSharedPreferenceStore.mPrefsStore.getString(
+                    "com.peacecorps.malaria.checkMediLastTakenTime", "").toString());
         }
     }
 
@@ -207,7 +219,6 @@ public class FirstAnalyticFragment extends Fragment {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // get selected radio button from radioGroup
                 int selectedId = btnRadGroup.getCheckedRadioButtonId();
 
@@ -216,20 +227,17 @@ public class FirstAnalyticFragment extends Fragment {
 
                 String ch = btnRadButton.getText().toString();
 
-                if(ch.equalsIgnoreCase("yes"))
-                {   //if yes, reset the database
+                if (ch.equalsIgnoreCase("yes")) {   //if yes, reset the database
                     DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
                     sqLite.resetDatabase();
+
                     mSharedPreferenceStore.mEditor.clear().commit();
                     startActivity(new Intent(getActivity(),
                             UserMedicineSettingsFragmentActivity.class));
                     getActivity().finish();
-                }
-                else
-                {
+                } else {
                     dialog.dismiss();
                 }
-
             }
         });
 
@@ -241,8 +249,5 @@ public class FirstAnalyticFragment extends Fragment {
             }
         });
         dialog.show();
-
     }
-
 }
-

@@ -547,9 +547,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         int dosesInaRow = 1;
 
-        if(cursor!=null) {
+        if (cursor != null) {
             cursor.moveToNext();
-            if(cursor!=null) {
+            if (cursor != null) {
                 String ats = EMPTY_STRING;
                 try {
                     ats = cursor.getString(1);
@@ -600,9 +600,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     /*Getting the Date Object from the String**/
     private Date getDateObject(String s) {
-        Date dobj=null;
+        Date dobj = null;
 
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
             dobj= sdf.parse(s);
@@ -672,10 +672,10 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public void resetDatabase() {
         SQLiteDatabase sqDB = getWritableDatabase();
 
-        sqDB.delete(USER_MEDICATION_CHOICE_TABLE,null,null);
-        sqDB.delete(APP_SETTING_TABLE,null,null);
-        sqDB.delete(LOCATION_TABLE,null,null);
-        sqDB.delete(PACKING_TABLE,null,null);
+        sqDB.delete(USER_MEDICATION_CHOICE_TABLE, null, null);
+        sqDB.delete(APP_SETTING_TABLE, null, null);
+        sqDB.delete(LOCATION_TABLE, null, null);
+        sqDB.delete(PACKING_TABLE, null, null);
         sqDB.close();
     }
 
@@ -688,7 +688,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String[] columns = {"Location", "Times"};
         String[] selArgs = {"" + location};
 
-        Cursor cursor = sqDB.query(LOCATION_TABLE,columns,"Location = ?",selArgs,null,null,null);
+        Cursor cursor = sqDB.query(LOCATION_TABLE, columns, "Location = ?", selArgs,
+                null, null, null);
 
         int a = 0, flag = 0;
 
@@ -720,7 +721,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**Inserting the Packing Item in DataBase when using Add Item Edit Text**/
-    public void insertPackingItem(String pItem,int quantity, String status) {
+    public void insertPackingItem(String pItem, int quantity, String status) {
         ContentValues cv = new ContentValues(2);
         cv.put("PackingItem", pItem);
         cv.put("Status", status);
@@ -757,197 +758,183 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String[] column = {"_id", "PackingItem", "Quantity"};
         String[] selArgs = {"yes"};
 
-        Cursor cursor = sqDB.query(PACKING_TABLE,column,"Status= ?",selArgs,null,null,KEY_ROW_ID+" asc ");
+        Cursor cursor = sqDB.query(PACKING_TABLE, column, "Status= ?", selArgs,
+                null, null, KEY_ROW_ID + " asc ");
 
         return cursor;
     }
 
     /**Fetching the list of Packing Item from which one can be chosen**/
-    public Cursor getPackingItem()
-    {
+    public Cursor getPackingItem() {
 
         SQLiteDatabase sqDB = getWritableDatabase();
-        String []column={"_id","PackingItem","Quantity"};
+        String[] column = {"_id", "PackingItem", "Quantity"};
         return sqDB.query(PACKING_TABLE, column,
                 null, null, null, null,
                 KEY_ROW_ID + " asc ");
-
     }
 
 
     /**Refreshing the status of each packing item to its original state**/
-    public void refreshPackingItemStatus()
-    {
-        String []column={"_id","PackingItem"};
-        String pItem="";
-        String []selArgs={pItem};
+    public void refreshPackingItemStatus() {
+        String pItem = "";
+        String[] selArgs = {pItem};
+
         ContentValues cv = new ContentValues(2);
-        cv.put("Status","no");
+        cv.put("Status", "no");
+
+        String[] column = {"_id", "PackingItem"};
+
         SQLiteDatabase sqDB = getWritableDatabase();
         Cursor cursor= sqDB.query(PACKING_TABLE, column,
                 null, null, null, null,
                 KEY_ROW_ID + " asc ");
 
-        while (cursor.moveToNext())
-        {
+        while (cursor.moveToNext()) {
             try {
-                selArgs[0]=cursor.getString(1);
-                sqDB.update(PACKING_TABLE,cv,"PackingItem=?",selArgs);
-            }
-            catch (Exception e)
-            {
+                selArgs[0] = cursor.getString(1);
+                sqDB.update(PACKING_TABLE, cv, "PackingItem=?", selArgs);
+            } catch (Exception e) {
                 break;
             }
-
-
-
         }
-
-
     }
 
 
     /**Finding the No. of Drugs**/
-    public int getCountTaken()
-    {
+    public int getCountTaken() {
+        String[] column = {"Status", "Timestamp", "Date", "Month", "Year", "Choice"};
+
         SQLiteDatabase sqDB = getWritableDatabase();
-        String []column={"Status","Timestamp","Date","Month","Year","Choice"};
-        Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE,column,null,null,null,null,"Timestamp ASC");
-        int count=0;
-        if(cursor!=null)
-        {
-            while (cursor.moveToNext())
-            {
+        Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null, null, null,
+                null, "Timestamp ASC");
+
+        int count = 0;
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
                 try {
                     if (cursor.getString(0).equalsIgnoreCase("yes") == true) {
                         count++;
-                        Log.d(TAG_DATABASE_HELPER,"Counter :"+count);
+                        Log.d(TAG_DATABASE_HELPER, "Counter :" + count);
                     }
-                }
-                catch(NullPointerException npe)
-                {
+                } catch (NullPointerException npe) {
                     return 0;
-
                 }
             }
         }
         sqDB.close();
         return count;
-
-
-
     }
 
 
     /**Finding the No. of weekly days between two dates for calculating Adherence**/
-    public int getIntervalWeekly(Date s, Date e, int weekday)
-    {
+    public int getIntervalWeekly(Date s, Date e, int weekday) {
         Calendar startCal;
         startCal = Calendar.getInstance();
         startCal.setTime(s);
+
         Calendar endCal;
         endCal = Calendar.getInstance();
         endCal.setTime(e);
+
         int medDays = 0;
+
         //If working dates are same,then checking what is the day on that dates.
         if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
-            if (startCal.get(Calendar.DAY_OF_WEEK) == weekday)
-            {
+            if (startCal.get(Calendar.DAY_OF_WEEK) == weekday) {
                 ++medDays;
                 return medDays;
             }
         }
+
         /*If start dates is coming after end dates, Then shuffling Dates and storing dates
         by incrementing upto end dates in do-while part.*/
         if (startCal.getTimeInMillis() > endCal.getTimeInMillis()) {
             startCal.setTime(e);
             endCal.setTime(s);
         }
-
         do {
-
-            if (startCal.get(Calendar.DAY_OF_WEEK)==weekday) {
+            if (startCal.get(Calendar.DAY_OF_WEEK) == weekday) {
                 ++medDays;
             }
+
             startCal.add(Calendar.DAY_OF_MONTH, 1);
         } while (startCal.getTimeInMillis() <= endCal.getTimeInMillis());
 
-        if(startCal.get(Calendar.DAY_OF_WEEK)==endCal.get(Calendar.DAY_OF_WEEK) && (startCal.get(Calendar.DAY_OF_WEEK)==weekday))
+        if (startCal.get(Calendar.DAY_OF_WEEK) == endCal.get(Calendar.DAY_OF_WEEK)
+                && (startCal.get(Calendar.DAY_OF_WEEK) == weekday)) {
             ++medDays;
+        }
 
         return medDays;
     }
 
     /**Finding the No. of days between two dates for calculating adherence of daily drugs**/
-    public int getIntervalDaily(Date s,Date e)
-    {
-        long sLong=s.getTime();
-        long eLong=e.getTime();
+    public int getIntervalDaily(Date s,Date e) {
+        long sLong = s.getTime();
+        long eLong = e.getTime();
 
-        long oneDay=24*60*60*1000;
+        long oneDay = 24 * 60 * 60 * 1000;
 
-        long interval=(eLong-sLong)/oneDay;
+        long interval = (eLong - sLong) / oneDay;
 
-        int interv=(int)interval+1;
-
+        int interv = (int) interval + 1;
         return interv;
-
     }
 
     /**Finding the Drugs between two dates for updaing Adherence in Day Fragment Activity of any selected dates**/
-    public int getCountTakenBetween(Date s,Date e)
-    {
+    public int getCountTakenBetween(Date s,Date e) {
+        String[] column = {"Status", "Timestamp", "Date", "Month", "Year", "Choice"};
+
         SQLiteDatabase sqDB = getWritableDatabase();
-        String []column={"Status","Timestamp","Date","Month","Year","Choice"};
-        Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE,column,null,null,null,null,"Timestamp ASC");
-        int count=0;
+        Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null, null, null,
+                null, "Timestamp ASC");
 
-        if(cursor!=null)
-        {
-            while (cursor.moveToNext())
-            {
+        int count = 0;
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
                 try {
+                    String d = cursor.getString(1);
 
-                    String d= cursor.getString(1);
-                    Log.d(TAG_DATABASE_HELPER,"Curr Time:"+d);
+                    Log.d(TAG_DATABASE_HELPER, "Curr Time:" + d);
+
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date curr= Calendar.getInstance().getTime();
-                    try{
 
-                        curr=sdf.parse(d);
+                    Date curr = Calendar.getInstance().getTime();
+
+                    try{
+                        curr = sdf.parse(d);
+                    } catch (Exception ex) {
+
                     }
-                    catch (Exception ex)
-                    {
-                    }
+
                     Log.d(TAG_DATABASE_HELPER,e.toString());
                     Log.d(TAG_DATABASE_HELPER,s.toString());
-                    long currt=curr.getTime();
-                    long endt=e.getTime();
 
-                    Calendar cal =Calendar.getInstance();
+                    long currt = curr.getTime();
+                    long endt = e.getTime();
+
+                    Calendar cal = Calendar.getInstance();
                     cal.setTime(s);
                     cal.add(Calendar.MONTH, 1);
-                    s=cal.getTime();
-                    long strt=s.getTime();
 
-                    Log.d(TAG_DATABASE_HELPER,"Current Long:"+currt);
-                    Log.d(TAG_DATABASE_HELPER,"End Long:"+endt);
-                    Log.d(TAG_DATABASE_HELPER,"Start Long:"+strt);
+                    s = cal.getTime();
+                    long strt = s.getTime();
+
+                    Log.d(TAG_DATABASE_HELPER, "Current Long:" + currt);
+                    Log.d(TAG_DATABASE_HELPER, "End Long:" + endt);
+                    Log.d(TAG_DATABASE_HELPER, "Start Long:" + strt);
 
                     if (cursor.getString(0).equalsIgnoreCase("yes") == true) {
-
-                        if(currt>=strt && currt<=endt)
+                        if (currt >= strt && currt <= endt) {
                             count++;
-                        else if(strt==endt)
-                        {
+                        } else if (strt == endt) {
                             count++;
                         }
                     }
-                }
-                catch(NullPointerException npe)
-                {
+                } catch (NullPointerException npe) {
                     return 0;
-
                 }
             }
         }
