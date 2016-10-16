@@ -15,6 +15,7 @@ import com.android.volley.VolleyLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,7 +31,7 @@ import java.net.PasswordAuthentication;
  */
 public class EffectivenessFragmentActivity extends FragmentActivity{
 
-    private TextView mEffectivenessLabel,mETitle;
+    private TextView mEffectivenessLabel;
 
     private static String TAGE = EffectivenessFragmentActivity.class.getSimpleName();
 
@@ -50,7 +51,9 @@ public class EffectivenessFragmentActivity extends FragmentActivity{
         setContentView(R.layout.effectiveness_fragment);
 
         mEffectivenessLabel = (TextView) findViewById(R.id.effectivenessLabel);
-        mETitle = (TextView)findViewById(R.id.eam);
+
+        TextView mETitle;
+        mETitle = (TextView) findViewById(R.id.eam);
         //"Please Wait..." Progress Dialog
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");

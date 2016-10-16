@@ -24,18 +24,15 @@ public class FirstAnalyticFragment extends Fragment {
 
 
     static SharedPreferenceStore mSharedPreferenceStore;
-    static View rootView;
     public static TextView checkMediLastTakenTime = null;
     public static TextView doses = null;
     public static TextView adherence = null;
     private Button mSettingsButton;
     private String TAGFAF = "FirstAnalyticFragment";
-    private Dialog dialog = null;
-    private TextView mlt,dinr,atm;
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView;
         rootView = inflater
                 .inflate(R.layout.fragment_first_analytic_screen, null);
 
@@ -45,6 +42,7 @@ public class FirstAnalyticFragment extends Fragment {
         doses = (TextView) rootView.findViewById(R.id.doses);
         adherence = (TextView) rootView.findViewById(R.id.adherence);
         updateUI();
+        TextView mlt, dinr, atm;
         mlt=(TextView)rootView.findViewById(R.id.mlt);
         dinr=(TextView)rootView.findViewById(R.id.dinr);
         atm=(TextView)rootView.findViewById(R.id.atm);
@@ -195,9 +193,11 @@ public class FirstAnalyticFragment extends Fragment {
         }
     }
 
-    public void addDialog()
-    {   /*Opens the Reset Dialog*/
-        dialog = new Dialog(this.getActivity(),android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
+    private Dialog dialog = null;
+
+    public void addDialog() {
+        /*Opens the Reset Dialog*/
+        dialog = new Dialog(this.getActivity(), android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
         dialog.setContentView(R.layout.resetdata_dialog);
         dialog.setTitle("Reset Data");
 

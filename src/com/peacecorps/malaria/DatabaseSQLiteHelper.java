@@ -754,12 +754,12 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     /**Refreshing the status of each packing item to its original state**/
     public void refreshPackingItemStatus()
     {
-        SQLiteDatabase sqDB = getWritableDatabase();
         String []column={"_id","PackingItem"};
         String pItem="";
         String []selArgs={pItem};
         ContentValues cv = new ContentValues(2);
         cv.put("Status","no");
+        SQLiteDatabase sqDB = getWritableDatabase();
         Cursor cursor= sqDB.query(PACKING_TABLE, column,
                 null, null, null, null,
                 KEY_ROW_ID + " asc ");
@@ -819,12 +819,12 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public int getIntervalWeekly(Date s, Date e, int weekday)
     {
         Calendar startCal;
-        Calendar endCal;
         startCal = Calendar.getInstance();
         startCal.setTime(s);
+        Calendar endCal;
         endCal = Calendar.getInstance();
         endCal.setTime(e);
-        int medDays = 0,flag=0;
+        int medDays = 0;
         //If working dates are same,then checking what is the day on that dates.
         if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
             if (startCal.get(Calendar.DAY_OF_WEEK) == weekday)

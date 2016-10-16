@@ -22,14 +22,8 @@ import java.util.ArrayList;
  */
 public class TripIndicatorDialogActivity extends ListActivity {
 
-    private DatabaseSQLiteHelper sqlite;
     /** Items entered by the user is stored in this ArrayList variable */
     ArrayList<String> list = new ArrayList<String>();
-
-    /** Declaring an ArrayAdapter to set items to ListView */
-    private SimpleCursorAdapter dataAdapter;
-
-    private String location="";
 
     public final static String LOCATION_TAG = "com.peacecorps.malaria.tripIndicator.LOCATION";
 
@@ -44,19 +38,23 @@ public class TripIndicatorDialogActivity extends ListActivity {
         mSharedPreferenceStore = new SharedPreferenceStore();
         mSharedPreferenceStore.getSharedPreferences(this);
 
-        sqlite = new DatabaseSQLiteHelper(this);
-         //fetching location for location history
-        Cursor cursor= sqlite.getLocation();
+        DatabaseSQLiteHelper sqlite;
 
-        final String LOCATION = "Location";
-        /** Columns to be Shown in The ListView **/
-        String[] columns = {sqlite.KEY_ROW_ID, LOCATION};
+
+        sqlite = new DatabaseSQLiteHelper(this);
 
         /**XML Bound Views according to the Column**/
         int[] to = new int[] {
                 R.id.locationListItemNumber,R.id.locationListItem
         };
 
+        /** Declaring an ArrayAdapter to set items to ListView */
+        SimpleCursorAdapter dataAdapter;
+        //fetching location for location history
+        Cursor cursor= sqlite.getLocation();
+        final String LOCATION = "Location";
+        /** Columns to be Shown in The ListView **/
+        String[] columns = {sqlite.KEY_ROW_ID, LOCATION};
         /** Create the adapter using the cursor pointing to the desired row in query
          * made to database ,as well as the layout information**/
         dataAdapter = new SimpleCursorAdapter(
@@ -78,7 +76,7 @@ public class TripIndicatorDialogActivity extends ListActivity {
                                     int position, long id) {
                 // Get the cursor, positioned to the corresponding row in the result set
                 Cursor cursor = (Cursor) listView.getItemAtPosition(position);
-
+                String location="";
                 location= cursor.getString(cursor.getColumnIndexOrThrow("Location"));
 
                 Toast.makeText(getApplicationContext(),
