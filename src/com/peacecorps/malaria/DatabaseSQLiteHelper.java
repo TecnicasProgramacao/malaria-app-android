@@ -540,10 +540,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
      * Need at Home Screen, First Analytic Scrren, Second Analytic Scrren, Day Fragment Screen
      * Main Activity for updating the dosesInArow as it changes according to the status we enter.**/
     public int getDosesInaRowWeekly() {
+        String []column = {"Status", "Timestamp", "Date", "Month", "Year"};
+
+        SQLiteDatabase sqDB = getWritableDatabase();
         Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null,
                 null, null, null, "Timestamp DESC");
-        SQLiteDatabase sqDB = getWritableDatabase();
-        String []column = {"Status", "Timestamp", "Date", "Month", "Year"};
 
         int dosesInaRow = 1;
 
