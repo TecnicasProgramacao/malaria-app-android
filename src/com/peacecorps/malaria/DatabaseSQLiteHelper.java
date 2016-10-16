@@ -614,60 +614,64 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /*Getting the Day of Week from the String**/
-    private int getDayofWeek(Date d)
-    {
-        Calendar cal=Calendar.getInstance();
+    private int getDayofWeek(Date d) {
+        Calendar cal = Calendar.getInstance();
         cal.setTime(d);
-        int day=cal.get(Calendar.DAY_OF_WEEK);
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+
         return day;
     }
 
     /*Getting no. of Days between two interval**/
     private long getNumberOfDays(Date d1,Date d2) {
-        long interval = 0;
-        Calendar c= Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         c.setTime(d1);
+
         long ld1 = c.getTimeInMillis();
         c.setTime(d2);
-        long ld2=c.getTimeInMillis();
+
+        long ld2 = c.getTimeInMillis();
         long oneDay = 1000 * 60 * 60 * 24;
+
+        long interval = 0;
         interval = (ld2-ld1) / oneDay;
+
         return interval;
     }
 
     /*Setting the Date Object to Human Readable Format**/
-    private String getHumanDateFormat(String ats,int aMonth)
-    {
-        String aYear=ats.substring(0, 4);
-        String aDate=ats.substring(Math.max(ats.length() - 2, 0));
-        ats=aYear+"-"+aMonth+"-"+aDate;
+    private String getHumanDateFormat(String ats,int aMonth) {
+        String aYear = ats.substring(0, 4);
+        String aDate = ats.substring(Math.max(ats.length() - 2, 0));
+        ats = aYear + "-" + aMonth + "-" + aDate;
+
         return ats;
     }
 
-    public String getMediLastTakenTime()
-    {
-        SQLiteDatabase sqDB=getWritableDatabase();
-        String [] column={"Date","Month","Year"};
-        String recentDate="";
-        Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null, null, null, null, "Timestamp DESC LIMIT 1");
-        if(cursor!=null)
-        { cursor.moveToNext();
-            try
-            {
-                recentDate=cursor.getString(0)+"/"+cursor.getString(1);
-            }
-            catch (Exception e)
-            {
+    public String getMediLastTakenTime() {
+        SQLiteDatabase sqDB = getWritableDatabase();
+        String[] column = {"Date", "Month", "Year"};
+        Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column,
+                null, null, null, null, "Timestamp DESC LIMIT 1");
+
+        String recentDate = "";
+
+        if (cursor != null) {
+            cursor.moveToNext();
+            try {
+                recentDate = cursor.getString(0) + "/" + cursor.getString(1);
+            } catch (Exception e) {
                 return "";
             }
-        }      sqDB.close();
+        }
+        sqDB.close();
         return recentDate;
     }
 
     /*Deleting the Database*/
-    public void resetDatabase()
-    {
+    public void resetDatabase() {
         SQLiteDatabase sqDB = getWritableDatabase();
+
         sqDB.delete(USER_MEDICATION_CHOICE_TABLE,null,null);
         sqDB.delete(APP_SETTING_TABLE,null,null);
         sqDB.delete(LOCATION_TABLE,null,null);
@@ -676,40 +680,39 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**Inseting the location for maintaining Location History**/
-    public void insertLocation(String location)
-    {
+    public void insertLocation(String location) {
         SQLiteDatabase sqDB = getWritableDatabase();
-        ContentValues cv =new ContentValues(2);
+        ContentValues cv = new ContentValues(2);
         cv.put("Location", location);
 
-        String [] columns = {"Location","Times"};
-        String [] selArgs = {""+location};
+        String[] columns = {"Location", "Times"};
+        String[] selArgs = {"" + location};
 
         Cursor cursor = sqDB.query(LOCATION_TABLE,columns,"Location = ?",selArgs,null,null,null);
 
-        int a=0, flag=0;
-        while (cursor.moveToNext())
-        {
+        int a = 0, flag = 0;
+
+        while (cursor.moveToNext()) {
             a= cursor.getInt(1);
             a++;
-            flag=1;
+
+            flag = 1;
         }
         cv.put("Times", a);
 
-        if(flag==1)
+        if (flag == 1) {
             sqDB.update(LOCATION_TABLE, cv, "Location= ?", selArgs);
-        else
+        }
+        else {
             sqDB.insert(LOCATION_TABLE, "location", cv);
-
-
+        }
     }
 
     /**Fetching the Location**/
-    public Cursor getLocation()
-    {
+    public Cursor getLocation() {
 
         SQLiteDatabase sqDB = getWritableDatabase();
-        String []column={"_id","Location"};
+        String[]column = {"_id", "Location"};
 
         return sqDB.query(LOCATION_TABLE, column,
                 null, null, null, null,
@@ -717,27 +720,26 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**Inserting the Packing Item in DataBase when using Add Item Edit Text**/
-    public void insertPackingItem(String pItem,int quantity, String status)
-    {
+    public void insertPackingItem(String pItem,int quantity, String status) {
+        ContentValues cv = new ContentValues(2);
+        cv.put("PackingItem", pItem);
+        cv.put("Status", status);
+
+        String[] columns = {"PackingItem", "Quantity", "Status"};
+        String[] selArgs = {"" + pItem};
+
         SQLiteDatabase sqDB = getWritableDatabase();
-        ContentValues cv =new ContentValues(2);
-        cv.put("PackingItem",pItem);
-        cv.put("Status",status);
+        Cursor cursor = sqDB.query(PACKING_TABLE, columns, "PackingItem = ?", selArgs, null,
+                null, null);
 
-        String [] columns = {"PackingItem","Quantity","Status"};
-        String [] selArgs = {""+pItem};
-
-        Cursor cursor = sqDB.query(PACKING_TABLE,columns,"PackingItem = ?",selArgs,null,null,null);
-        int flag=0, q=0;
-        while (cursor.moveToNext())
-        {
-           q= cursor.getInt(1);
+        int flag = 0, q = 0;
+        while (cursor.moveToNext()) {
+            q = cursor.getInt(1);
             flag++;
-            Log.d(TAG_DATABASE_HELPER,"Flag: "+flag);
+            Log.d(TAG_DATABASE_HELPER, "Flag: " + flag);
         }
 
-
-        if(flag==1) {
+        if (flag == 1) {
 
             cv.put("Quantity", quantity);
             sqDB.update(PACKING_TABLE, cv, "PackingItem= ?", selArgs);
@@ -746,23 +748,18 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             cv.put("Quantity", quantity);
             sqDB.insert(PACKING_TABLE, "item", cv);
         }
-
-
     }
 
     /**Fetching the Packing Item to be taken**/
-    public Cursor getPackingItemChecked()
-    {
-
+    public Cursor getPackingItemChecked() {
         SQLiteDatabase sqDB = getWritableDatabase();
-        String []column={"_id","PackingItem","Quantity"};
-        String []selArgs={"yes"};
 
+        String[] column = {"_id", "PackingItem", "Quantity"};
+        String[] selArgs = {"yes"};
 
         Cursor cursor = sqDB.query(PACKING_TABLE,column,"Status= ?",selArgs,null,null,KEY_ROW_ID+" asc ");
 
         return cursor;
-
     }
 
     /**Fetching the list of Packing Item from which one can be chosen**/
