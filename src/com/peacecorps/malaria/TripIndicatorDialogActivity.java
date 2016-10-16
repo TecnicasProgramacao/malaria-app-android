@@ -48,8 +48,9 @@ public class TripIndicatorDialogActivity extends ListActivity {
          //fetching location for location history
         Cursor cursor= sqlite.getLocation();
 
+        final String LOCATION = "Location";
         /** Columns to be Shown in The ListView **/
-        String[] columns = {sqlite.KEY_ROW_ID,sqlite.LOCATION};
+        String[] columns = {sqlite.KEY_ROW_ID, LOCATION};
 
         /**XML Bound Views according to the Column**/
         int[] to = new int[] {

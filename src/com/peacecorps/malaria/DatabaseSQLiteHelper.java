@@ -26,16 +26,10 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     private static final String LOCATION_TABLE = "locationSettings";
     private static final String PACKING_TABLE = "packingSettings";
     private static final String TAG_DATABASE_HELPER = "DatabaseSQLiteHelper";
-    public static final String LOCATION = "Location";
     public static final String KEY_ROW_ID = "_id";
 
     private static final String EMPTY_STRING = "";
     private static final int INT_ZERO = 0;
-
-    private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30,
-            31, 30, 31};
-    private final int[] daysOfMonthLeap = {31, 29, 31, 30, 31, 30, 31, 31, 30,
-            31, 30, 31};
 
     public DatabaseSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -69,10 +63,6 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     /**Method to Update the Progress Bars**/
     public int getData(final int month, final int year, final String choice) {
 
-        percentages= new ArrayList<Double>();
-        dates= new ArrayList<Integer>();
-        int count = INT_ZERO;
-
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         String column[] = {"_id", "Date", "Percentage"};
@@ -81,6 +71,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 "Month =? AND Year =? AND Status =? AND Choice =?", args, null, null, "Date ASC");
 
         boolean isDataFound = false;
+        int count = INT_ZERO;
+        percentages = new ArrayList<Double>();
+        dates = new ArrayList<Integer>();
 
         while (cursor.moveToNext()) {
             isDataFound = true;
@@ -160,15 +153,15 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String[] columns = {"_id", "Date", "Percentage", "Status"};
         String[] selArgs = {EMPTY_STRING + month, EMPTY_STRING + year, choice};
 
-        StringBuffer buffer = new StringBuffer();
         Cursor cursor = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE, columns,
                 "Month =? AND Year " + "=? AND Choice =?", selArgs, null, null, null, null);
 
-        int columnOfDate, columnStatus;
+        StringBuffer buffer = new StringBuffer();
 
         /**Queried for a Month in an Year, stopping when the dates required is found**/
         while (cursor.moveToNext()) {
 
+            int columnOfDate, columnStatus;
             columnOfDate = cursor.getColumnIndex("Date");
             columnStatus = cursor.getColumnIndex("Status");
 
@@ -198,7 +191,6 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 
-        SQLiteDatabase systemQueryDatabase = getReadableDatabase();
         ContentValues values = new ContentValues(2);
 
         values.put("Status", entry);
@@ -208,6 +200,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 String.valueOf(year)};
         String[] column = {"Percentage"};
 
+        SQLiteDatabase systemQueryDatabase = getReadableDatabase();
         /**Update is used instead of Insert, because the entry already exist**/
         systemQueryDatabase.update(USER_MEDICATION_CHOICE_TABLE, values, "Date=? AND Month=? " +
                 "AND YEAR=?", args);
@@ -232,9 +225,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 
-        SQLiteDatabase systemQueryDatabase = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues(2);
-        String choice = EMPTY_STRING, dateFormation = EMPTY_STRING;
+        String choice = EMPTY_STRING;
 
         //Get the type of choice in SharedPreferences
         if (SharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",
@@ -245,6 +236,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             choice = "daily";
         }
 
+        String dateFormation = EMPTY_STRING;
         //Scans and formats the date
         if (dayIsSingleDigit(date)) {
             dateFormation = EMPTY_STRING + year + "-" + month + "-" + date;
@@ -255,6 +247,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         String []columns = {"Status"};
         String []selArgs = {EMPTY_STRING + date, EMPTY_STRING + month, EMPTY_STRING + year};
+
+        SQLiteDatabase systemQueryDatabase = this.getWritableDatabase();
 
         Cursor cursor = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE, columns,
                 "Date=? AND Month =? AND Year =?", selArgs, null, null, null, null);
@@ -271,6 +265,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
 
         Log.d(TAG_DATABASE_HELPER, EMPTY_STRING + year);
+
+        ContentValues contentValues = new ContentValues(2);
 
         if (!hasStatus && lastStatus.equalsIgnoreCase(EMPTY_STRING)) {
             contentValues.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com.peacecorps." +
@@ -496,6 +492,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         assert month >= 1 && month <= 12;
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
+
+        final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30,
+                31, 30, 31};
+        final int[] daysOfMonthLeap = {31, 29, 31, 30, 31, 30, 31, 31, 30,
+                31, 30, 31};
 
         if (isLeapYear(year)) {
             return daysOfMonthLeap[month];
