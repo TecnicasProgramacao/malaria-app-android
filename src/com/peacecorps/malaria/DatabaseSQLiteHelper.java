@@ -111,6 +111,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     private boolean dayIsSingleDigit(final int dayOfMonth) {
 
+        //1~31 valid day intervals for one month
+        assert dayOfMonth >= 1 && dayOfMonth <= 31;
+
         boolean dayIsSingleDigit = false;
 
         if (dayOfMonth <= MAX_NUMBER_WITH_ONE_DIGIT) {
@@ -161,6 +164,13 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     /**Getting Medication Data of Each Day in Day Fragment Activity**/
     public String getMedicationData(final int date, final int month, final int year) {
+        //1~12 valid months intervals for one year
+        assert month >= 1 && month <= 12;
+        //1~31 valid day intervals for one month
+        assert date >= 1 && date <= 31;
+        //2000~current year valid years intervals
+        assert year >= 2000 && year <= Calendar.YEAR;
+
         SQLiteDatabase systemQueryDatabase = getReadableDatabase();
 
         String choice = "daily";
@@ -198,6 +208,13 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public void updateMedicationEntry(final int date, final int month, final int year,
                                       final String entry, final double percentage){
 
+        //1~12 valid months intervals for one year
+        assert month >= 1 && month <= 12;
+        //1~31 valid day intervals for one month
+        assert date >= 1 && date <= 31;
+        //2000~current year valid years intervals
+        assert year >= 2000 && year <= Calendar.YEAR;
+
         SQLiteDatabase systemQueryDatabase = getReadableDatabase();
         ContentValues values = new ContentValues(2);
 
@@ -224,6 +241,14 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
      * Usage is in Day Fragment Activity **/
     public void insertOrUpdateMissedMedicationEntry(final int date, final int month,
                                                     final int year, final double percentage) {
+
+        //1~12 valid months intervals for one year
+        assert month >= 1 && month <= 12;
+        //1~31 valid day intervals for one month
+        assert date >= 1 && date <= 31;
+        //2000~current year valid years intervals
+        assert year >= 2000 && year <= Calendar.YEAR;
+
         SQLiteDatabase systemQueryDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues(2);
         String choice = EMPTY_STRING, dateFormation = EMPTY_STRING;
@@ -306,6 +331,13 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     /*Is Entered is Used for Getting the Style of Each Calendar Grid Cell According to the Medication Status Taken or Not Taken*/
     public int isEntered(final int date, final int month, final int year) {
+        //1~12 valid months intervals for one year
+        assert month >= 1 && month <= 12;
+        //1~31 valid day intervals for one month
+        assert date >= 1 && date <= 31;
+        //2000~current year valid years intervals
+        assert year >= 2000 && year <= Calendar.YEAR;
+
         SQLiteDatabase sqDB = getWritableDatabase();
         String column[] = {"Status"};
         String args[] = {EMPTY_STRING + date, EMPTY_STRING + month, EMPTY_STRING + year};
@@ -361,6 +393,12 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
      * Usages in Alert Dialog Fragment for geting the status of pill for setting up Reminder
      * Usages in Day Fragment Activity for getting the previous status of day before updating it as not taken. **/
     public String getStatus(final int date, final int month, final int year){
+        //1~12 valid months intervals for one year
+        assert month >= 1 && month <= 12;
+        //1~31 valid day intervals for one month
+        assert date >= 1 && date <= 31;
+        //2000~current year valid years intervals
+        assert year >= 2000 && year <= Calendar.YEAR;
 
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column = {"Status"};
@@ -466,6 +504,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     /**Method to give no. of days in month. */
     private int getNumberDaysInMonth(final int month, final int year) {
+        //1~12 valid months intervals for one year
+        assert month >= 1 && month <= 12;
+        //2000~current year valid years intervals
+        assert year >= 2000 && year <= Calendar.YEAR;
+
         if (isLeapYear(year)) {
             return daysOfMonthLeap[month];
         } else {
@@ -475,6 +518,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     /**Check whether it is a leap layer**/
     private static boolean isLeapYear(final int year) {
+        //2000~current year valid years intervals
+        assert year >= 2000 && year <= Calendar.YEAR;
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
 
