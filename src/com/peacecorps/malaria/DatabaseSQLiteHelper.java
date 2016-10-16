@@ -326,17 +326,22 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         String args[] = {EMPTY_STRING + date, EMPTY_STRING + month, EMPTY_STRING + year};
         Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column,
                 "Date=? AND Month =? AND Year =?", args, null, null, null, null);
+
         //Runs through the database and checks whether the user has already taken the medicine
         while (cursor.moveToNext()) {
             int idx = INT_ZERO;
-            String status = EMPTY_STRING;
             idx = cursor.getColumnIndex("Status");
+
+            String status = EMPTY_STRING;
             status = cursor.getString(idx);
+
             if (status != null) {
-                if (status.equalsIgnoreCase("yes"))
+                if (status.equalsIgnoreCase("yes")) {
                     return 0;
-                else if (status.equalsIgnoreCase("no"))
+                }
+                else if (status.equalsIgnoreCase("no")) {
                     return 1;
+                }
             }
         }
         sqDB.close();
@@ -347,23 +352,29 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public long getFirstTime() {
         SQLiteDatabase sqDB = getWritableDatabase();
         String column[] = {"Timestamp"};
-        long firstRunTime = INT_ZERO;
         Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null, null,
                 null, null, "Timestamp ASC LIMIT 1");
+
+        long firstRunTime = INT_ZERO;
+
         //Runs through the database and checks the last time you used the medication
         while (cursor.moveToNext()) {
             int idx = INT_ZERO;
-            String selectedDate = EMPTY_STRING;
             idx = cursor.getColumnIndex("Timestamp");
+
+            String selectedDate = EMPTY_STRING;
             selectedDate = cursor.getString(idx);
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date compareDate = Calendar.getInstance().getTime();
+
             try {
                 compareDate   = sdf.parse(selectedDate);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Log.d(TAG_DATABASE_HELPER, "First Time: " + selectedDate);
+
             Calendar cal = Calendar.getInstance();
             cal.setTime(compareDate);
             firstRunTime = cal.getTimeInMillis();
@@ -404,27 +415,35 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public int getDosesInaRowDaily() {
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column = {"Status", "Timestamp", "Date", "Month", "Year", "Choice"};
-        int dosesInaRow = INT_ZERO;
         Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null,
                 null, null, null, "Timestamp DESC");
+
+        int dosesInaRow = INT_ZERO;
+
         /**One Iteration is done before entering the while loop for updating the previous and current dates**/
         if (cursor != null) {
             cursor.moveToNext();
             if (cursor != null) {
                 String ts = EMPTY_STRING;
-                int prevDate = INT_ZERO, currDate = INT_ZERO;
-                int currDateMonth = INT_ZERO, prevDateMonth = INT_ZERO;
-                int prevDateYear = INT_ZERO, currDateYear = INT_ZERO;
+
+                int currDate = INT_ZERO;
+
                 try {
                     ts = cursor.getString(cursor.getColumnIndex("Timestamp"));
+
                     currDate = cursor.getInt(2);
                     Log.d(TAG_DATABASE_HELPER, "curr dates 1->" + ts);
                 } catch (Exception e) {
                     return 0;
                 }
+
+                int prevDate = INT_ZERO;
+                int prevDateMonth = INT_ZERO;
+
                 if (cursor.getString(0).compareTo("yes") == 0) {
                     prevDate = cursor.getInt(2);
                     prevDateMonth = cursor.getInt(3);
+
                     if (Math.abs(currDate - prevDate) <= 1) {
                         dosesInaRow++;
                     } else {
@@ -433,6 +452,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 } else {
                     //Nothing to do
                 }
+
+                int currDateMonth = INT_ZERO;
+                int currDateYear = INT_ZERO;
 
                 /**Since Previous and Current Date our Updated,
                  * Now backwards scan is done till we receive consecutive previous and current dates **/
@@ -445,6 +467,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     Log.d(TAG_DATABASE_HELPER, "curr dates ->" + ts);
 
                     int parameter = Math.abs(currDate - prevDate);
+
                     if ((cursor.getString(0)) != null) {
                         if (currDateMonth == prevDateMonth) {
                             if (cursor.getString(0).compareTo("yes") == 0 && parameter == 1) {
@@ -517,17 +540,16 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
      * Need at Home Screen, First Analytic Scrren, Second Analytic Scrren, Day Fragment Screen
      * Main Activity for updating the dosesInArow as it changes according to the status we enter.**/
     public int getDosesInaRowWeekly() {
+        Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null,
+                null, null, null, "Timestamp DESC");
         SQLiteDatabase sqDB = getWritableDatabase();
         String []column = {"Status", "Timestamp", "Date", "Month", "Year"};
 
         int dosesInaRow = 1;
 
-        Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null,
-                null, null, null, "Timestamp DESC");
         if(cursor!=null) {
             cursor.moveToNext();
             if(cursor!=null) {
-
                 String ats = EMPTY_STRING;
                 try {
                     ats = cursor.getString(1);
@@ -539,47 +561,52 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 int aMonth = INT_ZERO;
                 aMonth = cursor.getInt(3) + 1;
                 ats = getHumanDateFormat(ats, aMonth);
+
                 Date ado;
                 ado = getDateObject(ats);
+
                 while (cursor.moveToNext()) {
                     String pts = EMPTY_STRING;
                     pts = cursor.getString(1);
+
                     int pMonth = INT_ZERO;
                     pMonth = cursor.getInt(3) + 1;
                     pts = getHumanDateFormat(pts, pMonth);
+
                     Date pdo;
                     pdo = getDateObject(pts);
+
                     int numDays = INT_ZERO;
                     numDays = getDayofWeek(pdo);
+
                     int pPara = INT_ZERO;
                     long aPara = INT_ZERO;
                     pPara = 7 - numDays + 7;
                     aPara = getNumberOfDays(pdo, ado);
-                    if (aPara <= pPara)
+
+                    if (aPara <= pPara) {
                         dosesInaRow++;
-                    else
+                    }
+                    else {
                         break;
+                    }
                     ats = pts;
                     ado = pdo;
                 }
             }
         }
         return dosesInaRow;
-
-
     }
 
     /*Getting the Date Object from the String**/
-    private Date getDateObject(String s)
-    {
+    private Date getDateObject(String s) {
         Date dobj=null;
 
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+
         try {
             dobj= sdf.parse(s);
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
