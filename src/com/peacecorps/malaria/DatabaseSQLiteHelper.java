@@ -236,6 +236,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues(2);
         String choice = EMPTY_STRING, dateFormation = EMPTY_STRING;
 
+        //Get the type of choice in SharedPreferences
         if (SharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",
                 false)) {
             choice = "weekly";
@@ -244,6 +245,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             choice = "daily";
         }
 
+        //Scans and formats the date
         if (dayIsSingleDigit(date)) {
             dateFormation = EMPTY_STRING + year + "-" + month + "-" + date;
         }
@@ -261,6 +263,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         boolean hasStatus = false;
         String lastStatus = EMPTY_STRING;
 
+        //Runs through the database and saves the last status saved
         while (cursor.moveToNext()) {
             statusQueried = cursor.getColumnIndex("Status");
             lastStatus = cursor.getString(statusQueried);
@@ -286,6 +289,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             Cursor cursorNoHaveStatus = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE,
                     col, "Month =? AND Year =?", arg, null, null, "Date ASC");
 
+            //Runs through the database and store the medication information that will be taken in the database
             while (cursor.moveToNext()) {
                 int lim = cursorNoHaveStatus.getInt(0);
 
@@ -328,6 +332,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 "Date=? AND Month =? AND Year =?", args, null, null, null, null);
         int idx = INT_ZERO;
         String status = EMPTY_STRING;
+        //Runs through the database and checks whether the user has already taken the medicine
         while (cursor.moveToNext()) {
             idx = cursor.getColumnIndex("Status");
             status = cursor.getString(idx);
@@ -352,7 +357,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         int idx = INT_ZERO;
         String selectedDate = EMPTY_STRING;
         long firstRunTime = INT_ZERO;
-
+        //Runs through the database and checks the last time you used the medication
         while (cursor.moveToNext()) {
             idx = cursor.getColumnIndex("Timestamp");
             selectedDate = cursor.getString(idx);
