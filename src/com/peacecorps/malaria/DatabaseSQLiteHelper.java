@@ -830,12 +830,12 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     /**Finding the No. of weekly days between two dates for calculating Adherence**/
     public int getIntervalWeekly(Date s, Date e, int weekday) {
-        Calendar startCal;
-        startCal = Calendar.getInstance();
+        Calendar startCal = Calendar.getInstance();
+        assert startCal != null : "Starting calendar is null";
         startCal.setTime(s);
 
-        Calendar endCal;
-        endCal = Calendar.getInstance();
+        Calendar endCal = Calendar.getInstance();
+        assert endCal != null : "Ending calendar is null";
         endCal.setTime(e);
 
         int medDays = 0;
