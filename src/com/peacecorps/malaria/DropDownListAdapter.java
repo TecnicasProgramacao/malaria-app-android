@@ -126,8 +126,11 @@ public class DropDownListAdapter extends BaseAdapter {
                     break;
                 }
             }
-            mSelectedItems.setText(firstSelected + " & "+ (selectedCount - 1) + " more");
-            setSelected(firstSelected + " & "+ (selectedCount - 1) + " more");
+
+            final String selectedItemsMessage = firstSelected + " & "+ (selectedCount - 1) + " more";
+
+            mSelectedItems.setText(selectedItemsMessage);
+            setSelected(selectedItemsMessage);
         }
     }
 
