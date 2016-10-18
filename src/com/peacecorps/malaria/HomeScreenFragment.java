@@ -397,31 +397,11 @@ public class HomeScreenFragment extends Fragment {
 
 
     public String decideDayofWeek(int checkDay, String possibleDays[]) {
-        String currentDayOfWeek = null;
-        switch (checkDay) {
-            case 1:
-                currentDayOfWeek = possibleDays[0];
-                break;
-            case 2:
-                currentDayOfWeek = possibleDays[1];
-                break;
-            case 3:
-                currentDayOfWeek = possibleDays[2];
-                break;
-            case 4:
-                currentDayOfWeek = possibleDays[3];
-                break;
-            case 5:
-                currentDayOfWeek = possibleDays[4];
-                break;
-            case 6:
-                currentDayOfWeek = possibleDays[5];
-                break;
-            case 7:
-                currentDayOfWeek = possibleDays[6];
-                break;
+        final int MONDAY = 1;
+        final int SUNDAY = 7;
+        assert (checkDay >= MONDAY && checkDay <= SUNDAY) : "Check date is not a valid day of the week";
 
-        }
+        final String currentDayOfWeek = possibleDays[checkDay - 1]; // Possible Days is 0-indexed.
         return currentDayOfWeek;
     }
 
