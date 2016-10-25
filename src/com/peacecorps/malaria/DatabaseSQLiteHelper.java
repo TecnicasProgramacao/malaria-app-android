@@ -871,7 +871,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**Finding the No. of days between two dates for calculating adherence of daily drugs**/
-    public int getIntervalDaily(Date s,Date e) {
+    public long getIntervalDaily(Date s, Date e) {
         long sLong = s.getTime();
         long eLong = e.getTime();
 
@@ -879,7 +879,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         long interval = (eLong - sLong) / oneDay;
 
-        int interv = (int) interval + 1;
+        long interv = (int) interval + 1;
         return interv;
     }
 
