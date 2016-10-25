@@ -940,10 +940,13 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return count;
     }
 
+
     private static final int MAX_NUMBER_WITH_ONE_DIGIT = 9;
+    private static final int MIN_NUMBER_WITH_ONE_DIGIT = 0;
 
     private boolean dayIsSingleDigit(final int dayOfMonth) {
 
+        assert dayOfMonth >= MIN_NUMBER_WITH_ONE_DIGIT : "Day of month is neggative.";
         boolean dayIsSingleDigit = false;
 
         if (dayOfMonth <= MAX_NUMBER_WITH_ONE_DIGIT) {
