@@ -1,3 +1,8 @@
+/**
+ * File: AlarmHandlerClass.java
+ * Purpose: Starts the daily or weekly alarm.
+ */
+
 package com.peacecorps.malaria;
 
 import java.util.Calendar;
