@@ -1,3 +1,9 @@
+/**
+ * File: HomeScreenFragmenet.java
+ * Purpose: This fragment is responsable for the home screen
+ *          This is the main fragment and has direct or indirect access to app's functionalities.
+ */
+
 package com.peacecorps.malaria;
 
 import android.app.Dialog;
