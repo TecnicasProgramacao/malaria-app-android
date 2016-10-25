@@ -1,19 +1,20 @@
+/**
+ * File: DrugArrayAdapter
+ * Purpose: Implements tha array adapter for each type of drug.
+ *          Show every drug's name as well as a link to it's description.
+ */
+
 package com.peacecorps.malaria;
 
-/**
- * Created by Ankita on 8/13/2015.
- */
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 public class DrugArrayAdapter extends ArrayAdapter<String>{
