@@ -108,6 +108,8 @@ public class SecondAnalyticFragment extends Fragment {
 
     //finding month from its integer
     public String getMonth(int date) {
+        assert date >= 0 && date <= 31;
+
         String month[] = getResources().getStringArray(R.array.month);
 
         /* After decrementing month date, it may become negative, so the month will be on the previous year.
@@ -199,6 +201,10 @@ public class SecondAnalyticFragment extends Fragment {
 
     /*Finding No. of Days in Month*/
     public int getNumberOfDaysInMonth(int month) {
+        final int JANUARY = 0;
+        final int DECEMBER = 12;
+
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
         return daysOfMonth[month];
     }
 
@@ -207,6 +213,8 @@ public class SecondAnalyticFragment extends Fragment {
     * Also on the basis of status of each day modified later in the calendar
     * */
     public void updateProgressBar(String choice, int date) {
+        assert date >= 0 && date <= 31;
+
         DatabaseSQLiteHelper sqLH = new DatabaseSQLiteHelper(getActivity());
         Typeface cf = Typeface.createFromAsset(getActivity().getAssets(),"fonts/garreg.ttf");
         firstMonthProgressLabel.setText(getMonth(date - 3));
@@ -285,6 +293,7 @@ public class SecondAnalyticFragment extends Fragment {
 
     /**Update UI is called on resume to Update the Graph and Progress Bars**/
     public void updateUI(String choice, int date) {
+        assert date >= 0 && date <= 31;
 
         updateProgressBar(choice, date);
         DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());

@@ -118,6 +118,10 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
 
     /**Setting Adapter to each Grid Cell of Calendar**/
     private void setGridCellAdapterToDate(int month, int year) {
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
+        assert year <= Calendar.YEAR;
+
+
         adapter = new GridCellAdapter(getApplicationContext(),
                 R.id.calendar_day_gridcell, month, year);
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
@@ -561,6 +565,8 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
      * @return next month of the year
      */
     private int getNextMonth(final int currentMonth) {
+        assert (currentMonth >= JANUARY && currentMonth <= DECEMBER) : ("Month is not between January (1) and December (12)");
+
         // Precondition.
         assertMonthIsValid(currentMonth);
 

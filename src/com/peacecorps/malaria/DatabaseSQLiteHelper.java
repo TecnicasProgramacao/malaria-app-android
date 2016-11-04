@@ -31,6 +31,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     private static final String EMPTY_STRING = "";
     private static final int INT_ZERO = 0;
 
+    private final int JANUARY = 1;
+    private final int DECEMBER = 12;
+
     public DatabaseSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -141,7 +144,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     //Getting Medication Data of Each Day in Day Fragment Activity
     public String getMedicationData(final int date, final int month, final int year) {
         //1~12 valid months intervals for one year
-        assert month >= 1 && month <= 12;
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
         //1~31 valid day intervals for one month
         assert date >= 1 && date <= 31;
         //2000~current year valid years intervals
@@ -185,7 +188,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                                       final String entry, final double percentage){
 
         //1~12 valid months intervals for one year
-        assert month >= 1 && month <= 12;
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
         //1~31 valid day intervals for one month
         assert date >= 1 && date <= 31;
         //2000~current year valid years intervals
@@ -219,7 +222,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                                                     final int year, final double percentage) {
 
         //1~12 valid months intervals for one year
-        assert month >= 1 && month <= 12;
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
         //1~31 valid day intervals for one month
         assert date >= 1 && date <= 31;
         //2000~current year valid years intervals
@@ -315,7 +318,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     //Is Entered is Used for Getting the Style of Each Calendar Grid Cell According to the Medication Status Taken or Not Taken
     public int isEntered(final int date, final int month, final int year) {
         //1~12 valid months intervals for one year
-        assert month >= 1 && month <= 12;
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
         //1~31 valid day intervals for one month
         assert date >= 1 && date <= 31;
         //2000~current year valid years intervals
@@ -388,7 +391,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
      * Usages in Day Fragment Activity for getting the previous status of day before updating it as not taken. **/
     public String getStatus(final int date, final int month, final int year){
         //1~12 valid months intervals for one year
-        assert month >= 1 && month <= 12;
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
         //1~31 valid day intervals for one month
         assert date >= 1 && date <= 31;
         //2000~current year valid years intervals
@@ -509,7 +512,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     //Method to give no. of days in month.
     private int getNumberDaysInMonth(final int month, final int year) {
         //1~12 valid months intervals for one year
-        assert month >= 1 && month <= 12;
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 

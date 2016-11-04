@@ -415,6 +415,13 @@ public class HomeScreenFragment extends Fragment {
 
 
     public void missedDayRecord(int day, int month, int year){
+        final int JANUARY = 1;
+        final int DECEMBER = 12;
+
+        assert day >= 0 && day <= 31;
+        assert (month >= JANUARY && month <= DECEMBER) : ("Month is not between January (1) and December (12)");
+        assert year <= Calendar.YEAR;
+
         DatabaseSQLiteHelper sqLH = new DatabaseSQLiteHelper(getActivity());
         sqLH.insertOrUpdateMissedMedicationEntry(day,month,year,computeAdherenceRate());
 
