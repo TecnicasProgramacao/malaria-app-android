@@ -403,6 +403,8 @@ public class HomeScreenFragment extends Fragment {
 
 
     public String decideDayofWeek(int checkDay, String possibleDays[]) {
+        assert checkDay <= Integer.MAX_VALUE;
+
         final int MONDAY = 1;
         final int SUNDAY = 7;
         assert (checkDay >= MONDAY && checkDay <= SUNDAY) : "Check date is not a valid day of the week";
@@ -413,7 +415,6 @@ public class HomeScreenFragment extends Fragment {
 
 
     public void missedDayRecord(int day, int month, int year){
-
         DatabaseSQLiteHelper sqLH = new DatabaseSQLiteHelper(getActivity());
         sqLH.insertOrUpdateMissedMedicationEntry(day,month,year,computeAdherenceRate());
 

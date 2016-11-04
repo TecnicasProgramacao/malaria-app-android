@@ -60,7 +60,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public static ArrayList<Double> percentages;
     public static ArrayList<Integer> dates;
 
-    /**Method to Update the Progress Bars**/
+    //Method to Update the Progress Bars
     public int getData(final int month, final int year, final String choice) {
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
@@ -138,7 +138,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         this.getWritableDatabase().close();
     }
 
-    /**Getting Medication Data of Each Day in Day Fragment Activity**/
+    //Getting Medication Data of Each Day in Day Fragment Activity
     public String getMedicationData(final int date, final int month, final int year) {
         //1~12 valid months intervals for one year
         assert month >= 1 && month <= 12;
@@ -158,7 +158,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         StringBuffer buffer = new StringBuffer();
 
-        /**Queried for a Month in an Year, stopping when the dates required is found**/
+        //Queried for a Month in an Year, stopping when the dates required is found
         while (cursor.moveToNext()) {
 
             int columnOfDate, columnStatus;
@@ -180,7 +180,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return buffer.toString();
     }
 
-    /**Method to Modify the entry of Each Day**/
+    //Method to Modify the entry of Each Day
     public void updateMedicationEntry(final int date, final int month, final int year,
                                       final String entry, final double percentage){
 
@@ -312,7 +312,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         systemQueryDatabase.close();
     }
 
-    /*Is Entered is Used for Getting the Style of Each Calendar Grid Cell According to the Medication Status Taken or Not Taken*/
+    //Is Entered is Used for Getting the Style of Each Calendar Grid Cell According to the Medication Status Taken or Not Taken
     public int isEntered(final int date, final int month, final int year) {
         //1~12 valid months intervals for one year
         assert month >= 1 && month <= 12;
@@ -348,7 +348,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return 2;
     }
 
-    /**Getting the oldest registered entry of Pill**/
+    //Getting the oldest registered entry of Pill
     public long getFirstTime() {
         SQLiteDatabase sqDB = getWritableDatabase();
         String column[] = {"Timestamp"};
@@ -420,7 +420,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         int dosesInaRow = INT_ZERO;
 
-        /**One Iteration is done before entering the while loop for updating the previous and current dates**/
+        //One Iteration is done before entering the while loop for updating the previous and current dates
         if (cursor != null) {
             cursor.moveToNext();
             if (cursor != null) {
@@ -506,7 +506,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return dosesInaRow;
     }
 
-    /**Method to give no. of days in month. */
+    //Method to give no. of days in month.
     private int getNumberDaysInMonth(final int month, final int year) {
         //1~12 valid months intervals for one year
         assert month >= 1 && month <= 12;
@@ -525,7 +525,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    /**Check whether it is a leap layer**/
+    //Check whether it is a leap layer
     private static boolean isLeapYear(final int year) {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
@@ -578,7 +578,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     pdo = getDateObject(pts);
 
                     int numDays = INT_ZERO;
-                    numDays = getDayofWeek(pdo);
+                    numDays = getDayOfWeek(pdo);
 
                     int pPara = INT_ZERO;
                     long aPara = INT_ZERO;
@@ -599,7 +599,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return dosesInaRow;
     }
 
-    /*Getting the Date Object from the String**/
+    //Getting the Date Object from the String
     private Date getDateObject(String s) {
         Date dobj = null;
 
@@ -614,8 +614,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return dobj;
     }
 
-    /*Getting the Day of Week from the String**/
-    private int getDayofWeek(Date d) {
+    //Getting the Day of Week from the String
+    private int getDayOfWeek(Date d) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(d);
         int day = cal.get(Calendar.DAY_OF_WEEK);
@@ -623,7 +623,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return day;
     }
 
-    /*Getting no. of Days between two interval**/
+    //Getting no. of Days between two interval
     private long getNumberOfDays(Date d1,Date d2) {
         Calendar c = Calendar.getInstance();
         c.setTime(d1);
@@ -640,8 +640,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return interval;
     }
 
-    /*Setting the Date Object to Human Readable Format**/
-    private String getHumanDateFormat(String ats,int aMonth) {
+    //Setting the Date Object to Human Readable Format
+    private String getHumanDateFormat(String ats, int aMonth) {
         String aYear = ats.substring(0, 4);
         String aDate = ats.substring(Math.max(ats.length() - 2, 0));
         ats = aYear + "-" + aMonth + "-" + aDate;
@@ -669,7 +669,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return recentDate;
     }
 
-    /*Deleting the Database*/
+    //Deleting the Database
     public void resetDatabase() {
         SQLiteDatabase sqDB = getWritableDatabase();
 
@@ -680,7 +680,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         sqDB.close();
     }
 
-    /**Inseting the location for maintaining Location History**/
+    //Inseting the location for maintaining Location History
     public void insertLocation(String location) {
         SQLiteDatabase sqDB = getWritableDatabase();
         ContentValues cv = new ContentValues(2);
@@ -710,7 +710,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    /**Fetching the Location**/
+    //Fetching the Location
     public Cursor getLocation() {
 
         SQLiteDatabase sqDB = getWritableDatabase();
@@ -721,7 +721,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 KEY_ROW_ID + " asc ");
     }
 
-    /**Inserting the Packing Item in DataBase when using Add Item Edit Text**/
+    //Inserting the Packing Item in DataBase when using Add Item Edit Text
     public void insertPackingItem(String pItem, int quantity, String status) {
         ContentValues cv = new ContentValues(2);
         cv.put("PackingItem", pItem);
@@ -752,7 +752,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    /**Fetching the Packing Item to be taken**/
+    //Fetching the Packing Item to be taken
     public Cursor getPackingItemChecked() {
         SQLiteDatabase sqDB = getWritableDatabase();
 
@@ -765,7 +765,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    /**Fetching the list of Packing Item from which one can be chosen**/
+    //Fetching the list of Packing Item from which one can be chosen
     public Cursor getPackingItem() {
 
         SQLiteDatabase sqDB = getWritableDatabase();
@@ -775,8 +775,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 KEY_ROW_ID + " asc ");
     }
 
-
-    /**Refreshing the status of each packing item to its original state**/
+    //Refreshing the status of each packing item to its original state
     public void refreshPackingItemStatus() {
         String pItem = "";
         String[] selArgs = {pItem};
@@ -802,7 +801,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
 
-    /**Finding the No. of Drugs**/
+    //Finding the No. of Drugs
     public int getCountTaken() {
         String[] column = {"Status", "Timestamp", "Date", "Month", "Year", "Choice"};
 
@@ -828,7 +827,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     }
 
 
-    /**Finding the No. of weekly days between two dates for calculating Adherence**/
+    //Finding the No. of weekly days between two dates for calculating Adherence
     public int getIntervalWeekly(Date s, Date e, int weekday) {
         Calendar startCal = Calendar.getInstance();
         assert startCal != null : "Starting calendar is null";
@@ -849,7 +848,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         }
 
         /*If start dates is coming after end dates, Then shuffling Dates and storing dates
-        by incrementing upto end dates in do-while part.*/
+        by incrementing up to end dates in do-while part.*/
         if (startCal.getTimeInMillis() > endCal.getTimeInMillis()) {
             startCal.setTime(e);
             endCal.setTime(s);
@@ -870,7 +869,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return medDays;
     }
 
-    /**Finding the No. of days between two dates for calculating adherence of daily drugs**/
+    //Finding the No. of days between two dates for calculating adherence of daily drugs
     public long getIntervalDaily(Date s, Date e) {
         final long sLong = s.getTime();
         long eLong = e.getTime();
@@ -880,7 +879,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         return interval;
     }
 
-    /**Finding the Drugs between two dates for updaing Adherence in Day Fragment Activity of any selected dates**/
+    //Finding the Drugs between two dates for updaing Adherence in Day Fragment Activity of any selected dates
     public int getCountTakenBetween(Date s,Date e) {
         String[] column = {"Status", "Timestamp", "Date", "Month", "Year", "Choice"};
 

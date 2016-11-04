@@ -100,6 +100,8 @@ public class DropDownListAdapter extends BaseAdapter {
      * Function which updates the selected values display and information(checkSelected[])
      * */
     private void setText(int position1){
+        assert position1 >= 0;
+
         if (!TripIndicatorFragmentActivity.checkSelected[position1]) {
             TripIndicatorFragmentActivity.checkSelected[position1] = true;
             selectedCount++;

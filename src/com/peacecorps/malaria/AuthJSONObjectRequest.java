@@ -31,7 +31,4 @@ public class AuthJSONObjectRequest extends JsonObjectRequest {
         params.put("Authorization", auth);
         return params;
     }
-
-
-
 }

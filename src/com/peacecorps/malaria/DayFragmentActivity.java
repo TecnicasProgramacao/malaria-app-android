@@ -47,6 +47,7 @@ public class DayFragmentActivity extends FragmentActivity {
     private int flag=0;
     private long curr_time=0;
     private static DatabaseSQLiteHelper sqLite;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -83,7 +84,7 @@ public class DayFragmentActivity extends FragmentActivity {
         day=cal.get(Calendar.DATE);
         mon=months[month];
         year=cal.get(Calendar.YEAR);
-        curr_time=cal.getTimeInMillis();
+        curr_time = cal.getTimeInMillis();
 
         date_header=String.valueOf(day)+" "+mon+" "+String.valueOf(year);
         Log.d(TAGD, date_header);
@@ -285,26 +286,34 @@ public class DayFragmentActivity extends FragmentActivity {
 
     /**Computing the Adherence Rate for selected Date**/
     public double computeAdherenceRate(long day_time) {
-        long interval = checkDrugTakenTimeInterval("firstRunTime", day_time);
+        assert day_time >= 0 && day_time <= Long.MAX_VALUE;
 
-        Date e=new Date();
+        long interval = checkDrugTakenTimeInterval("firstRunTime", day_time);
+        assert interval >= 0 && interval <= Long.MAX_VALUE;
+
+        Date e = new Date();
         e.setTime(day_time);
 
-        Date s=new Date();
+        Date s = new Date();
         s.setTime(sqLite.getFirstTime());
 
         long takenCount = sqLite.getCountTakenBetween(s,e);
-        Log.d(TAGD,"Taken Count while computing adherence :"+takenCount);
-        double adherenceRate = ((double)takenCount /(double) interval) * 100;
+        Log.d(TAGD,"Taken Count while computing adherence :" + takenCount);
+        double adherenceRate = ((double) takenCount /(double) interval) * 100;
         return adherenceRate;
     }
 
 
     /**Finding the Time Interval between two dates**/
-    public  long checkDrugTakenTimeInterval(String time,long day_time) {
+    public  long checkDrugTakenTimeInterval(String time, long day_time) {
+        assert day_time >= 0 && day_time <= Long.MAX_VALUE;
+
+
         long interval = 0;
 
         long takenDate = sqLite.getFirstTime();
+        assert takenDate >= 0 && takenDate <= Long.MAX_VALUE;
+
         if(takenDate!=0) {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(day_time);

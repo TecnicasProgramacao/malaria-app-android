@@ -61,6 +61,9 @@ public class DrugArrayAdapter extends ArrayAdapter<String>{
     }
     //When the info button is clicked for the drug, an alert dialog will show its description
     public void addClickListener(final int position, Button infoButton) {
+        assert position >= 0;
+        assert infoButton != null;
+
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
