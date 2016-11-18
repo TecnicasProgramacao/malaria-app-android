@@ -115,6 +115,8 @@ public class SecondAnalyticFragment extends Fragment {
         /* After decrementing month date, it may become negative, so the month will be on the previous year.
          * Now month and year must be updated accordingly.
          */
+
+        // TO DO: change dates to positive numbers.
         if (date == -1) {
             date = 11;
             myear = Calendar.getInstance().get(Calendar.YEAR) - 1;
