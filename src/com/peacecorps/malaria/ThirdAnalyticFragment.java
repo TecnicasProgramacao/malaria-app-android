@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+/* To do: Log messages in separate functions. They are consuming too much visual space.*/
 
 public class ThirdAnalyticFragment extends Activity implements OnClickListener {
     private static final String tag = "ThirdAnalyticFragment";
