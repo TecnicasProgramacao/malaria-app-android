@@ -427,8 +427,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                 status=dbSQLH.isEntered(Integer.parseInt(theday),getMonthNumber(themonth),Integer.parseInt(theyear));
                 Drawable dr;
                 //Setting the Drawables according to Taken or Not Taken
-                switch (status)
-                {
+                switch (status) {
                     case 0:
                         dr = getResources().getDrawable(R.drawable.accept_medi_checked_tiny);
                         gridcell.setCompoundDrawablesWithIntrinsicBounds(null, dr, null, null);
@@ -443,6 +442,8 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                         gridcell.setBackgroundResource(R.drawable.calendar_button_selector);
                         gridcell.setTextColor(getResources().getColor(R.color.golden_brown));
                         break;
+                    default:
+                        // Do nothing.
                 }
 
                 Log.d(tag, "Setting GridCell " + theday + "-" + themonth + "-"
