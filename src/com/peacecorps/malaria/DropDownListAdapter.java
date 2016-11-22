@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.concurrent.Exchanger;
 
 public class DropDownListAdapter extends BaseAdapter {
 
@@ -88,10 +89,17 @@ public class DropDownListAdapter extends BaseAdapter {
             }
         });
 
-        if(TripIndicatorFragmentActivity.checkSelected[position])
-            holder.chkbox.setChecked(true);
-        else
+        try {
+            final boolean isPositionSelected = TripIndicatorFragmentActivity.getCheckSelectedAt(position);
+
+            if (isPositionSelected)
+                holder.chkbox.setChecked(true);
+            else {
+                holder.chkbox.setChecked(false);
+            }
+        } catch(IllegalArgumentException illegalArgumentException) {
             holder.chkbox.setChecked(false);
+        }
         return convertView;
     }
 
@@ -102,12 +110,17 @@ public class DropDownListAdapter extends BaseAdapter {
     private void setText(int position1){
         assert position1 >= 0;
 
-        if (!TripIndicatorFragmentActivity.checkSelected[position1]) {
-            TripIndicatorFragmentActivity.checkSelected[position1] = true;
-            selectedCount++;
-        } else {
-            TripIndicatorFragmentActivity.checkSelected[position1] = false;
-            selectedCount--;
+        final boolean isCheckSelectedAtPosition = TripIndicatorFragmentActivity.getCheckSelectedAt(position1);
+        try {
+            if (!isCheckSelectedAtPosition) {
+                TripIndicatorFragmentActivity.checkSelected[position1] = true;
+                selectedCount++;
+            } else {
+                TripIndicatorFragmentActivity.checkSelected[position1] = false;
+                selectedCount--;
+            }
+        } catch(IllegalArgumentException illegalArgumentException) {
+            // Do nothing.
         }
 
         if (selectedCount == 0) {

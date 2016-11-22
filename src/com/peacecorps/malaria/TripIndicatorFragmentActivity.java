@@ -58,7 +58,9 @@ public class TripIndicatorFragmentActivity extends FragmentActivity {
     public static String mDatesPicked;
     private TextView dateData,monthData,yearData,DepartureDateData,DepartureMonthData,DepartureYearData;
     public static AutoCompleteTextView locationSpinner;
-    public static boolean[] checkSelected;
+
+    private static boolean[] checkSelected;
+
     private ArrayList<String> items;
     public boolean arriv,depar;
     static SharedPreferenceStore mSharedPreferenceStore;
@@ -650,6 +652,16 @@ public class TripIndicatorFragmentActivity extends FragmentActivity {
     {
         DialogFragment newFragment = new TimePickerDialogDeparture();
         newFragment.show(getFragmentManager(),"Departure Time");
+    }
+
+    public static boolean getCheckSelectedAt(final int at) throws IllegalArgumentException {
+        if(at >= 0 && at < checkSelected.length) {
+            return checkSelected[at];
+        }
+        else {
+            final String invalidAtMessage = "at argument is neggative or bigger than checkSelected size";
+            throw new IllegalArgumentException(invalidAtMessage);
+        }
     }
 
 }
