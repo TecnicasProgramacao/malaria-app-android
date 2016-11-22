@@ -664,4 +664,18 @@ public class TripIndicatorFragmentActivity extends FragmentActivity {
         }
     }
 
+
+    public static void setCheckSelectedAt(final int at, final boolean value) throws IllegalArgumentException {
+        if(at >= 0 && at < checkSelected.length) {
+            checkSelected[at] = value;
+        }
+        else {
+            final String invalidAtMessage = "at argument is neggative or bigger than checkSelected size";
+            throw new IllegalArgumentException(invalidAtMessage);
+        }
+    }
+
+    public static int getCheckSelectedLength() {
+        return checkSelected.length;
+    }
 }

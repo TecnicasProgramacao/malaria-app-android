@@ -5,6 +5,7 @@ package com.peacecorps.malaria;
  */
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,9 @@ public class DropDownListAdapter extends BaseAdapter {
     private static String firstSelected = "";
     private ViewHolder holder;
     private static String selected = "";	//shortened selected values representation
+
+
+    private String TAG_DDLA = "DropDownListAdapter";
 
     public static String getSelected() {
         return selected;
@@ -111,41 +115,54 @@ public class DropDownListAdapter extends BaseAdapter {
         assert position1 >= 0;
 
         final boolean isCheckSelectedAtPosition = TripIndicatorFragmentActivity.getCheckSelectedAt(position1);
+        boolean nextCheckedValue = false;
         try {
             if (!isCheckSelectedAtPosition) {
-                TripIndicatorFragmentActivity.checkSelected[position1] = true;
+                nextCheckedValue = true;
                 selectedCount++;
             } else {
-                TripIndicatorFragmentActivity.checkSelected[position1] = false;
+                nextCheckedValue = false;
                 selectedCount--;
             }
+            TripIndicatorFragmentActivity.setCheckSelectedAt(position1, nextCheckedValue);
         } catch(IllegalArgumentException illegalArgumentException) {
-            // Do nothing.
         }
 
+        final int checkSelectedLength = TripIndicatorFragmentActivity.getCheckSelectedLength();
         if (selectedCount == 0) {
             mSelectedItems.setText(R.string.trip_select_string);
         } else if (selectedCount == 1) {
-            for (int i = 0; i < TripIndicatorFragmentActivity.checkSelected.length; i++) {
-                if (TripIndicatorFragmentActivity.checkSelected[i] == true) {
-                    firstSelected = mListItems.get(i);
-                    break;
+            try {
+                for (int i = 0; i < checkSelectedLength; i++) {
+                    final boolean selected = TripIndicatorFragmentActivity.getCheckSelectedAt(i);
+                    if (selected == true) {
+                        firstSelected = mListItems.get(i);
+                        break;
+                    }
                 }
+                mSelectedItems.setText(firstSelected);
+                setSelected(firstSelected);
+            } catch(IllegalArgumentException illegalArgumentException) {
+                Log.d(TAG_DDLA, "Invalid checkSelected length");
             }
-            mSelectedItems.setText(firstSelected);
-            setSelected(firstSelected);
         } else if (selectedCount > 1) {
-            for (int i = 0; i < TripIndicatorFragmentActivity.checkSelected.length; i++) {
-                if (TripIndicatorFragmentActivity.checkSelected[i] == true) {
-                    firstSelected = mListItems.get(i);
-                    break;
+            try {
+                for (int i = 0; i < checkSelectedLength; i++) {
+                    final boolean selected = TripIndicatorFragmentActivity.getCheckSelectedAt(i);
+                    if (selected == true) {
+                        firstSelected = mListItems.get(i);
+                        break;
+                    }
                 }
+
+                final String selectedItemsMessage = firstSelected + " & " + (selectedCount - 1) + " more";
+
+                mSelectedItems.setText(selectedItemsMessage);
+                setSelected(selectedItemsMessage);
             }
-
-            final String selectedItemsMessage = firstSelected + " & "+ (selectedCount - 1) + " more";
-
-            mSelectedItems.setText(selectedItemsMessage);
-            setSelected(selectedItemsMessage);
+            catch(IllegalArgumentException illegalArgumentException) {
+                Log.d(TAG_DDLA, "Invalid checkSelected length");
+            }
         }
     }
 
