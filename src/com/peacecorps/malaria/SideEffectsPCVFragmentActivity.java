@@ -119,8 +119,11 @@ public class SideEffectsPCVFragmentActivity extends FragmentActivity {
                 File file = null;
                 try {
                     file = new File(getCacheDir(), "SEPCache"); // Pass getFilesDir() and "MyFile" to read file
+                    assert(file.isFile()) : "SEPCache doesn't exist";
+                    assert(!file.isDirectory()) : "SEPCache is directory";
 
                     input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+
                     String line;
                     StringBuffer buffer = new StringBuffer();
                     while ((line = input.readLine()) != null) {
