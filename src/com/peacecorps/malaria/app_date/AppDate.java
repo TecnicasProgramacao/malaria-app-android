@@ -12,7 +12,7 @@ public class AppDate {
     private static final int MAX_VALID_YEAR = 2100;
     private final int MIN_VALID_YEAR = 1900;
 
-    AppDate(int day, int month, int year) throws IllegalMonthException, IllegalDayException, IllegalArgumentException {
+    AppDate(int day, int month, int year) throws IllegalMonthException, IllegalDayException, IllegalYearException {
         setMonth(month);
         setDay(month, day);
         setYear(year);
@@ -38,7 +38,7 @@ public class AppDate {
 
     }
 
-    private void setYear(final int year) throws IllegalArgumentException {
+    private void setYear(final int year) throws IllegalYearException {
         if(isValidYear(year)) {
             this.year = year;
         }
