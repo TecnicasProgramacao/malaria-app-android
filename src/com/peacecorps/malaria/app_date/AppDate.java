@@ -24,6 +24,7 @@ public class AppDate {
         setYear(year);
     }
 
+    // When only month and year are necessary (day is not used).
     public AppDate(int month, int year) throws IllegalMonthException, IllegalYearException {
         setMonth(month);
         setYear(year);
