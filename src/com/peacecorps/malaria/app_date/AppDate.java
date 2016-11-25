@@ -104,8 +104,13 @@ public class AppDate {
         assert isValidMonth(month) : "month is invalid"; // month must be valid in this step (it was checked before)
 
         boolean ok_day = false;
-        if(daysOfMonth[month] == day) {
-                ok_day = true;
+
+        // Checks if day is a number less or equal than the number of days to the given month.
+        if(day >= 1 && day <= daysOfMonth[month]) {
+            ok_day = true;
+        }
+        else { // day is not between the valid interval [1, number of days for the given month]
+            ok_day = false;
         }
         return ok_day;
     }
