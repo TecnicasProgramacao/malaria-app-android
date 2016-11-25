@@ -12,18 +12,18 @@ public class AppDate {
     private static final int MAX_VALID_YEAR = 2100;
     private final int MIN_VALID_YEAR = 1900;
 
-    AppDate(int day, int month, int year) throws IllegalMonthException, IllegalArgumentException {
+    AppDate(int day, int month, int year) throws IllegalMonthException, IllegalDayException, IllegalArgumentException {
         setMonth(month);
         setDay(month, day);
         setYear(year);
     }
 
-    private void setDay(final int month, final int day) throws IllegalArgumentException {
+    private void setDay(final int month, final int day) throws IllegalDayException {
         if(isValidDay(month, day)) {
             this.day = day;
         }
         else {
-            throw new IllegalArgumentException("Invalid day");
+            throw new IllegalDayException("Invalid day");
         }
 
     }
