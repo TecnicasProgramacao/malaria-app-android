@@ -1,4 +1,4 @@
-package com.peacecorps.malaria;
+package com.peacecorps.malaria.app_date;
 
 
 public class AppDate {
@@ -12,9 +12,9 @@ public class AppDate {
     private static final int MAX_VALID_YEAR = 2100;
     private final int MIN_VALID_YEAR = 1900;
 
-    AppDate(int day, int month, int year) throws IllegalArgumentException {
-        setDay(month, day);
+    AppDate(int day, int month, int year) throws IllegalMonthException, IllegalArgumentException {
         setMonth(month);
+        setDay(month, day);
         setYear(year);
     }
 
@@ -28,7 +28,7 @@ public class AppDate {
 
     }
 
-    private void setMonth(final int month) throws IllegalArgumentException {
+    private void setMonth(final int month) throws IllegalMonthException {
         if(isValidMonth(month)) {
             this.month = month;
         }
@@ -69,17 +69,11 @@ public class AppDate {
     }
 
     private boolean isValidDay(final int month, final int day) {
+        assert isValidMonth(month) : "month is invalid"; // month must be valid in this step (it was checked before)
+
         boolean ok_day = false;
-        if(isValidMonth(month)) {
-            if(daysOfMonth[month] == day) {
+        if(daysOfMonth[month] == day) {
                 ok_day = true;
-            }
-            else {
-                ok_day = false;
-            }
-        }
-        else {
-            ok_day = false;
         }
         return ok_day;
     }
