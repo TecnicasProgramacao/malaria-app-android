@@ -1,6 +1,8 @@
 package com.peacecorps.malaria.app_date;
 
 
+import android.util.Log;
+
 public class AppDate {
 
     private int day;
@@ -9,13 +11,42 @@ public class AppDate {
 
     private final int NUMBER_OF_MONTHS = 12;
     private final int[] daysOfMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    private static final int MAX_VALID_YEAR = 2100;
+    private static final int MAX_VALID_YEAR = 2500;
     private final int MIN_VALID_YEAR = 1900;
 
-    AppDate(int day, int month, int year) throws IllegalMonthException, IllegalDayException, IllegalYearException {
+    private final int JANUARY = 1;
+    private final int DECEMBER = 12;
+
+    public AppDate(int day, int month, int year) throws IllegalMonthException, IllegalDayException, IllegalYearException {
         setMonth(month);
         setDay(month, day);
         setYear(year);
+    }
+
+    public AppDate(int month, int year) throws IllegalMonthException, IllegalYearException {
+        setMonth(month);
+        setYear(year);
+    }
+
+    // Set current month to the previous month.
+    public void setToPreviousMonth() {
+        if(month <= JANUARY) { // Previous month is in the last year.
+            month = DECEMBER;
+            year--;
+        } else {
+            month--; // Previous month is in the current year.
+        }
+    }
+
+
+    // Set current month to the next month.
+    public void setToNextMonth() {
+        if(month >= DECEMBER) { // Next month is in the next year.
+            month = JANUARY;
+            year++;
+        } else {
+            month++; // Next month is in the current year.
+        }
     }
 
     private void setDay(final int month, final int day) throws IllegalDayException {

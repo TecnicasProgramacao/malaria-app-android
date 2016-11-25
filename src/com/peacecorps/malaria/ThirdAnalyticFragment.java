@@ -32,6 +32,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.peacecorps.malaria.app_date.AppDate;
+import com.peacecorps.malaria.app_date.IllegalMonthException;
+import com.peacecorps.malaria.app_date.IllegalYearException;
+
 
 /* To do: Log messages in separate functions. They are consuming too much visual space.*/
 
@@ -139,16 +143,21 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
      */
     @Override
     public void onClick(View view) {
-        // Preconditon
-        assertMonthIsValid(month);
-
-        // Current month should be changed to it's previous month
-        if(view == prevMonth) {
-            setPreviousMonth();
+        try {
+            // Current month should be changed to it's previous month
+            if(view == prevMonth) {
+                setPreviousMonth();
+            }
+            // Current month should be changed to it's next month
+            if(view == nextMonth) {
+                setNextMonth();
+            }
         }
-        // Current month should be changed to it's next month
-        if(view == nextMonth) {
-            setNextMonth();
+        catch(IllegalMonthException illegalMonthException) {
+            // To do.
+        }
+        catch(IllegalYearException illegalYearException) {
+            // To do.
         }
 
         // Postcondition
@@ -526,13 +535,12 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
     /**
      * Calculates the preivous month, according to the current month.
      */
-    private void setPreviousMonth() {
-        if(month <= JANUARY) { // Previous month is in the last year.
-            month = DECEMBER;
-            year--;
-        } else {
-            month--; // Previous month is in the current year.
-        }
+    private void setPreviousMonth() throws IllegalMonthException, IllegalYearException {
+        AppDate appDate = new AppDate(month, year);
+        appDate.setToPreviousMonth();
+        month = appDate.getMonth();
+        year = appDate.getYear();
+
         Log.d(tag, "Setting Prev Month in GridCellAdapter: " + "Month: "
                 + month + " Year: " + year);
         setGridCellAdapterToDate(month, year);
@@ -541,13 +549,12 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
     /**
      * Calculates the next month, according to the current month.
      */
-    private void setNextMonth() {
-        if(month >= DECEMBER) { // Next month is in the next year.
-            month = JANUARY;
-            year++;
-        } else {
-            month++; // Next month is in the current year.
-        }
+    private void setNextMonth() throws IllegalMonthException, IllegalYearException {
+        AppDate appDate = new AppDate(month, year);
+        appDate.setToNextMonth();
+        month = appDate.getMonth();
+        year = appDate.getYear();
+
         Log.d(tag, "Setting Next Month in GridCellAdapter: " + "Month: "
                 + month + " Year: " + year);
         setGridCellAdapterToDate(month, year);
