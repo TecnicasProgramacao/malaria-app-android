@@ -3,7 +3,10 @@ package com.peacecorps.malaria;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import com.peacecorps.malaria.R;
+
+/**
+ * Class AlarmAutoStart: responsable for starting the alaram when told to do so.
+ */
 
 public class AlarmAutoStart extends BroadcastReceiver {
 
