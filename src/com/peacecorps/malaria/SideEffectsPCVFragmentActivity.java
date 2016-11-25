@@ -145,15 +145,15 @@ public class SideEffectsPCVFragmentActivity extends FragmentActivity {
 
     // Shows the loading animation in Activity
     private void showpDialog(){
-        if(!progressDialog.isShowing()) // Progress dialog must be shown only if it's now shown yet
+        if(!progressDialog.isShowing()) // Progress dialog must be shown only if it's not shown yet
             progressDialog.show();
 
     }
 
+    // Dismiss the loading animation in Activity
     private void hidepDialog(){
-        if(progressDialog.isShowing())
+        if(progressDialog.isShowing()) // Progress dialog must be hidden only if it's not hidden yet
             progressDialog.dismiss();
-        //for dismissing the loading animation in Activity
     }
 
 }
