@@ -1,7 +1,8 @@
 package com.peacecorps.malaria.app_date;
 
-
-import android.util.Log;
+/**
+ * Class AppDate: responsable for date arithmetic operations.
+ */
 
 public class AppDate {
 
