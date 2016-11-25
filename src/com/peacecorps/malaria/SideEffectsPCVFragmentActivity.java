@@ -143,10 +143,11 @@ public class SideEffectsPCVFragmentActivity extends FragmentActivity {
         VolleyApplication.getInstance().addToRequestQueue(jsonObjReq);
     }
 
+    // Shows the loading animation in Activity
     private void showpDialog(){
-        if(!progressDialog.isShowing())
+        if(!progressDialog.isShowing()) // Progress dialog must be shown only if it's now shown yet
             progressDialog.show();
-        //for showing the loading animation in Activity
+
     }
 
     private void hidepDialog(){
