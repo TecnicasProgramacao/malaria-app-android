@@ -90,14 +90,15 @@ public class VolunteerAdherenceFragmentActivity extends FragmentActivity {
                     mVolunteerAdherenceLabel.setText(jsonResponse);
                     //reading from cache, if no connectivity
                     String content = mVolunteerAdherenceLabel.getText().toString();
-                    File file;
-                    FileOutputStream outputStream;
+
+
                     try {
                         // file = File.createTempFile("MyCache", null, getCacheDir());
-                        file = new File(getCacheDir(), "VACache");
+                        File file = new File(getCacheDir(), "VACache");
+                        FileOutputStream outputStream = new FileOutputStream(file);
 
-                        outputStream = new FileOutputStream(file);
                         outputStream.write(content.getBytes());
+
                         outputStream.close();
                     } catch (IOException e) {
                         e.printStackTrace();
