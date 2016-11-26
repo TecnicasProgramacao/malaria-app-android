@@ -205,7 +205,11 @@ public class TripIndicatorPackingActivity extends Activity {
         numDrugs = (TextView)findViewById(R.id.quantity);
         whichDrug = (TextView)findViewById(R.id.drugName);
         numDrugs.setText("" + mNumDrugs);
-        sqLite.insertPackingItem("Pills", (int) mNumDrugs, "yes");
+
+        // Check's if mNumDrugs can safely be converted to int.
+        assert isSupportedByInt(mNumDrugs) : "Integer overflow in conversion from long to int";
+        final int mNumDrugsInt = (int) mNumDrugs;
+        sqLite.insertPackingItem("Pills", mNumDrugsInt, "yes");
 
         /** Drug Selection **/
         whichDrug.setOnClickListener(new View.OnClickListener() {
@@ -292,8 +296,12 @@ public class TripIndicatorPackingActivity extends Activity {
 
     }
 
-
-
-
-
+    /**
+     * @param value integer value that fits in a long variable
+     * @return returns true if long integer "value" can be safely represented in a int variable.
+     */
+    private boolean isSupportedByInt(final long value) {
+        boolean supports = value >= (long) Integer.MIN_VALUE && value <= (long) Integer.MAX_VALUE;
+        return supports;
+    }
 }
