@@ -241,12 +241,22 @@ public class SecondAnalyticFragment extends Fragment {
         secondMonthProgressLabel.setText(getMonth(date - 2));
         secondMonthProgressLabel.setTypeface(cf);
         progress = sqLH.getData(mdate, myear, choice);
-        if (choice.equalsIgnoreCase("daily"))
-            progressp = (float) progress / getNumberOfDaysInMonth(mdate) * 100;
-        else
-            progressp = progress * 25;
 
-        if(progressp>=50)
+
+        if (choice.equalsIgnoreCase("daily")) {
+
+            final float progressFloat = (float) progress;
+            final float numberOfDaysInMonthFloat = (float) getNumberOfDaysInMonth(mdate);
+            final float PERCENTAGE = 100.0F;
+
+            // Float division is required.
+            progressp = (progressFloat / numberOfDaysInMonthFloat) * PERCENTAGE;
+        }
+        else {
+            progressp = (float) progress * 25.0F;
+        }
+
+        if(progressp >= 50.0)
         {
             secondMonthProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.saf_progress_bar_green));
             secondMonthProgressBar.setBackground(getResources().getDrawable(R.drawable.progress_bg_green));
