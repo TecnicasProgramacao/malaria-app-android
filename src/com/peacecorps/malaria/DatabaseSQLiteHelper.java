@@ -875,6 +875,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             //Nothing to do
         }
         do {
+            //Increase the amount of medication taken on a given day of the week
             if (startCal.get(Calendar.DAY_OF_WEEK) == weekday) {
                 ++medDays;
             } else {
@@ -883,7 +884,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
             startCal.add(Calendar.DAY_OF_MONTH, 1);
         } while (startCal.getTimeInMillis() <= endCal.getTimeInMillis());
-
+        
         if (startCal.get(Calendar.DAY_OF_WEEK) == endCal.get(Calendar.DAY_OF_WEEK)
                 && (startCal.get(Calendar.DAY_OF_WEEK) == weekday)) {
             ++medDays;
@@ -914,6 +915,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         int count = 0;
 
+        //If the medication bank has something the cursor will go through the bank.
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 try {
@@ -948,6 +950,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     Log.d(TAG_DATABASE_HELPER, "End Long:" + endt);
                     Log.d(TAG_DATABASE_HELPER, "Start Long:" + strt);
 
+                    /* If the user has already taken the medicine on the day,
+                      the medicine counter taken will be increased */
                     if (cursor.getString(0).equalsIgnoreCase("yes") == true) {
                         if (currt >= strt && currt <= endt) {
                             count++;
@@ -979,6 +983,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         assert dayOfMonth >= MIN_NUMBER_WITH_ONE_DIGIT : "Day of month is neggative.";
         boolean dayIsSingleDigit = false;
 
+        //If the day has only one digit the function return flag will be true.
         if (dayOfMonth <= MAX_NUMBER_WITH_ONE_DIGIT) {
             dayIsSingleDigit = true;
         } else {
