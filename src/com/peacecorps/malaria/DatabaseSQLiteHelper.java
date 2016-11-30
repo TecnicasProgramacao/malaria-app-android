@@ -177,6 +177,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
             if (dateOfTableDatabbase == date) {
                 buffer.append(statusQueried);
+            } else {
+                //Nothing to do
             }
         }
         systemQueryDatabase.close();
@@ -345,6 +347,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 else if (status.equalsIgnoreCase("no")) {
                     return 1;
                 }
+            } else {
+                //Nothing to do
             }
         }
         sqDB.close();
@@ -597,7 +601,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     ats = pts;
                     ado = pdo;
                 }
+            } else {
+                //Nothing to do
             }
+        } else {
+            //Nothing to do
         }
         return dosesInaRow;
     }
@@ -667,6 +675,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             } catch (Exception e) {
                 return "";
             }
+        } else {
+            //Nothing to do
         }
         sqDB.close();
         return recentDate;
@@ -824,6 +834,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     return 0;
                 }
             }
+        } else {
+            //Nothing to do
         }
         sqDB.close();
         return count;
@@ -847,7 +859,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             if (startCal.get(Calendar.DAY_OF_WEEK) == weekday) {
                 ++medDays;
                 return medDays;
+            } else {
+                //Nothing to do
             }
+        } else {
+            //Nothing to do
         }
 
         /*If start dates is coming after end dates, Then shuffling Dates and storing dates
@@ -855,10 +871,14 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         if (startCal.getTimeInMillis() > endCal.getTimeInMillis()) {
             startCal.setTime(e);
             endCal.setTime(s);
+        } else {
+            //Nothing to do
         }
         do {
             if (startCal.get(Calendar.DAY_OF_WEEK) == weekday) {
                 ++medDays;
+            } else {
+                //Nothing to do
             }
 
             startCal.add(Calendar.DAY_OF_MONTH, 1);
@@ -867,6 +887,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         if (startCal.get(Calendar.DAY_OF_WEEK) == endCal.get(Calendar.DAY_OF_WEEK)
                 && (startCal.get(Calendar.DAY_OF_WEEK) == weekday)) {
             ++medDays;
+        } else {
+            //Nothing to do
         }
 
         return medDays;
@@ -931,12 +953,18 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                             count++;
                         } else if (strt == endt) {
                             count++;
+                        } else {
+                            //Nothing to do
                         }
+                    } else {
+                        //Nothing to do
                     }
                 } catch (NullPointerException npe) {
                     return 0;
                 }
             }
+        } else {
+            //Nothing to do
         }
         sqDB.close();
         return count;
