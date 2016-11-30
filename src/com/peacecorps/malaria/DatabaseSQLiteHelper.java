@@ -75,6 +75,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.query(USER_MEDICATION_CHOICE_TABLE, column,
                 "Month =? AND Year =? AND Status =? AND Choice =?", args, null, null, "Date ASC");
 
+        //Variable used to signal if the drug date was found
         boolean isDataFound = false;
         int count = INT_ZERO;
         percentages = new ArrayList<Double>();
@@ -112,11 +113,14 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                                            final String status, final Double percentage) {
         ContentValues values = new ContentValues(2);
 
+        //Instance of the Calendar class that will be used to save the current day
         Calendar calendarAux;
         calendarAux = Calendar.getInstance();
         calendarAux.setTime(date);
 
+        //Current day of the month
         int dayOfMonth = calendarAux.get(Calendar.DATE);
+        //Variable that will be used to format the Day, month and year
         String timeStamp = EMPTY_STRING;
 
         //Format the time passed if the day has only one digit
@@ -153,9 +157,12 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 
+        //Instance used to access the database
         SQLiteDatabase systemQueryDatabase = getReadableDatabase();
 
+        //Choice of medication intake
         String choice = "daily";
+        //Table columns and medicines in the database
         String[] columns = {"_id", "Date", "Percentage", "Status"};
         String[] selArgs = {EMPTY_STRING + month, EMPTY_STRING + year, choice};
 
