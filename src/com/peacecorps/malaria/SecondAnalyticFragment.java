@@ -77,7 +77,7 @@ public class SecondAnalyticFragment extends Fragment {
         thirdMonthProgressBar = (ProgressBar) rootView.findViewById(R.id.thirdMonthProgressBar);
         fourthMonthProgressBar = (ProgressBar) rootView.findViewById(R.id.fourthMonthProgressBar);
 
-
+        //Calendar necessary to take a current month
         Calendar cal = Calendar.getInstance();
 
         date = Calendar.getInstance().get(Calendar.MONTH);
@@ -103,7 +103,9 @@ public class SecondAnalyticFragment extends Fragment {
 
     }
 
+    //Auxiliar day using in below methods
     int mdate;
+    //Auxiliar year using in below methods
     int myear;
 
     //finding month from its integer
@@ -330,9 +332,10 @@ public class SecondAnalyticFragment extends Fragment {
     /**Setting Up Graph**/
     public void SetupAndShowGraph() {
 
-
+        //Chart to be shown
         GraphViewData graphViewData[] = new GraphViewData[DatabaseSQLiteHelper.dates.size()];
-        String verLabels[]={"100%","50%","25%","0%"};
+        //Acceptable label vector in chart
+        String verLabels[] = {"100%", "50%", "25%", "0%"};
         //adding data
         for (int index=0; index < DatabaseSQLiteHelper.percentages.size(); index++) {
 

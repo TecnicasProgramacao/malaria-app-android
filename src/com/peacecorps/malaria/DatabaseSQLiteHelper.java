@@ -60,7 +60,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     }
 
+    //Vector that will be used to store the percentages in the methods below
     public static ArrayList<Double> percentages;
+    //Vector that will be used to store the days in the methods below
     public static ArrayList<Integer> dates;
 
     //Method to Update the Progress Bars
