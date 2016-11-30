@@ -610,6 +610,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     return 0;
                 }
                 int aMonth = INT_ZERO;
+                //Take the day of the year and add one as it starts from 0
                 aMonth = cursor.getInt(3) + 1;
                 ats = getHumanDateFormat(ats, aMonth);
 
@@ -621,6 +622,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     pts = cursor.getString(1);
 
                     int pMonth = INT_ZERO;
+                    //Take the day of the year and add one as it starts from 0
                     pMonth = cursor.getInt(3) + 1;
                     pts = getHumanDateFormat(pts, pMonth);
 
@@ -657,6 +659,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     private Date getDateObject(String s) {
         Date dobj = null;
 
+        //Sets the date format
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
@@ -686,6 +689,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         c.setTime(d2);
 
         long ld2 = c.getTimeInMillis();
+
+        //Calculates the amount of milliseconds in a day
         long oneDay = 1000 * 60 * 60 * 24;
 
         long interval = 0;
@@ -730,9 +735,13 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     public void resetDatabase() {
         SQLiteDatabase sqDB = getWritableDatabase();
 
+        //Delete the table of User medication of database
         sqDB.delete(USER_MEDICATION_CHOICE_TABLE, null, null);
+        //Delete the table of settings of database
         sqDB.delete(APP_SETTING_TABLE, null, null);
+        //Delete the table of location of database
         sqDB.delete(LOCATION_TABLE, null, null);
+        //Delete the table of packing of database
         sqDB.delete(PACKING_TABLE, null, null);
         sqDB.close();
     }
@@ -950,6 +959,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         final long sLong = s.getTime();
         long eLong = e.getTime();
 
+        //Amount of milliseconds in one day
         final long oneDay = 24 * 60 * 60 * 1000;
         final long interval = ((eLong - sLong) / oneDay) + 1;
         return interval;
