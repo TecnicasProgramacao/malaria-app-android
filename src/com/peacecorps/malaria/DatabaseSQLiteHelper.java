@@ -395,12 +395,18 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             int idx = INT_ZERO;
             idx = cursor.getColumnIndex("Timestamp");
+            assert idx >= 0;
 
             String selectedDate = EMPTY_STRING;
             selectedDate = cursor.getString(idx);
+            assert selectedDate != null : "Starting String selectedDate is null";
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            assert sdf != null : "Starting SimpleDateFormat is null";
+
             Date compareDate = Calendar.getInstance().getTime();
+            assert compareDate != null : "Starting Date is null";
+
 
             try {
                 compareDate   = sdf.parse(selectedDate);
@@ -410,6 +416,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             Log.d(TAG_DATABASE_HELPER, "First Time: " + selectedDate);
 
             Calendar cal = Calendar.getInstance();
+            assert cal != null : "Starting calendar is null";
+
             cal.setTime(compareDate);
             firstRunTime = cal.getTimeInMillis();
         }
@@ -510,6 +518,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     Log.d(TAG_DATABASE_HELPER, "curr dates ->" + ts);
 
                     int parameter = Math.abs(currDate - prevDate);
+                    assert parameter >= 0;
 
                     if ((cursor.getString(0)) != null) {
                         if (currDateMonth == prevDateMonth) {
@@ -578,6 +587,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         //Instance of Calendar for take a max number of days in one year
         Calendar cal = Calendar.getInstance();
+        assert cal != null : "Starting calendar is null";
+
         cal.set(Calendar.YEAR, year);
 
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
@@ -661,6 +672,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         //Sets the date format
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        assert sdf != null;
 
         try {
             dobj= sdf.parse(s);
@@ -676,6 +688,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Calendar cal = Calendar.getInstance();
         cal.setTime(d);
         int day = cal.get(Calendar.DAY_OF_WEEK);
+        assert day >= 0 && day <= 7;
 
         return day;
     }
@@ -686,9 +699,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         c.setTime(d1);
 
         long ld1 = c.getTimeInMillis();
+        assert ld1 > 0 && ld1 < Long.MAX_VALUE;
         c.setTime(d2);
 
         long ld2 = c.getTimeInMillis();
+        assert ld2 > 0 && ld2 < Long.MAX_VALUE;
 
         //Calculates the amount of milliseconds in a day
         long oneDay = 1000 * 60 * 60 * 24;
