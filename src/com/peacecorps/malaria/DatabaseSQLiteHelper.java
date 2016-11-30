@@ -116,10 +116,13 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //Instance of the Calendar class that will be used to save the current day
         Calendar calendarAux;
         calendarAux = Calendar.getInstance();
+        assert calendarAux != null : "Starting calendar is null";
+
         calendarAux.setTime(date);
 
         //Current day of the month
         int dayOfMonth = calendarAux.get(Calendar.DATE);
+        assert dayOfMonth >= 0 && dayOfMonth <= 31;
         //Variable that will be used to format the Day, month and year
         String timeStamp = EMPTY_STRING;
 
@@ -170,16 +173,20 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 "Month =? AND Year " + "=? AND Choice =?", selArgs, null, null, null, null);
 
         StringBuffer buffer = new StringBuffer();
+        assert buffer != null;
 
         //Queried for a Month in an Year, stopping when the dates required is found
         while (cursor.moveToNext()) {
 
             int columnOfDate, columnStatus;
             columnOfDate = cursor.getColumnIndex("Date");
+            assert columnOfDate >= 0;
             columnStatus = cursor.getColumnIndex("Status");
+            assert  columnStatus >= 0;
 
             int dateOfTableDatabbase = cursor.getInt(columnOfDate);
             String statusQueried = cursor.getString(columnStatus);
+            assert statusQueried != null;
 
             Log.d(TAG_DATABASE_HELPER, "Passed Date:" + date + "Found dates:" +
                     dateOfTableDatabbase);
@@ -359,9 +366,12 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             int idx = INT_ZERO;
             idx = cursor.getColumnIndex("Status");
+            assert idx >= 0;
 
             String status = EMPTY_STRING;
             status = cursor.getString(idx);
+            assert status != null : "Starting String status is null";
+
 
             //Checks if any status has been found before comparing
             if (status != null) {
