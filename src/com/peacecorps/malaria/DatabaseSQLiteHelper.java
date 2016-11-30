@@ -215,6 +215,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         String[] args = new String[]{String.valueOf(date), String.valueOf(month),
                 String.valueOf(year)};
+
+        //Table columns and medicines in the database
         String[] column = {"Percentage"};
 
         SQLiteDatabase systemQueryDatabase = getReadableDatabase();
@@ -242,6 +244,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 
+        //Choice of medication intake
         String choice = EMPTY_STRING;
 
         //Get the type of choice in SharedPreferences
@@ -262,6 +265,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             dateFormation = EMPTY_STRING + year + "-" + month + "-0" + date;
         }
 
+        //Table columns and medicines in the database
         String []columns = {"Status"};
         String []selArgs = {EMPTY_STRING + date, EMPTY_STRING + month, EMPTY_STRING + year};
 
@@ -270,8 +274,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE, columns,
                 "Date=? AND Month =? AND Year =?", selArgs, null, null, null, null);
 
+        //Status of medication taken queried
         int statusQueried;
+        //If has status of medication taken
         boolean hasStatus = false;
+        //Last status of medication taken
         String lastStatus = EMPTY_STRING;
 
         //Runs through the database and saves the last status saved
@@ -297,6 +304,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
             systemQueryDatabase.insert(USER_MEDICATION_CHOICE_TABLE, "medicaton", contentValues);
 
+            //Table columns and medicines in the database
             String []col = {"Date"};
             String []arg = {EMPTY_STRING + month, EMPTY_STRING + year};
             Cursor cursorNoHaveStatus = systemQueryDatabase.query(USER_MEDICATION_CHOICE_TABLE,
@@ -339,7 +347,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 
+        //Database instance searched for
         SQLiteDatabase sqDB = getWritableDatabase();
+        //Table columns and medicines in the database
         String column[] = {"Status"};
         String args[] = {EMPTY_STRING + date, EMPTY_STRING + month, EMPTY_STRING + year};
         Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column,
@@ -372,7 +382,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     //Getting the oldest registered entry of Pill
     public long getFirstTime() {
+        //Database instance searched for
         SQLiteDatabase sqDB = getWritableDatabase();
+        //Table columns and medicines in the database
         String column[] = {"Timestamp"};
         Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null, null,
                 null, null, "Timestamp ASC LIMIT 1");
@@ -416,7 +428,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 
+        //Database instance searched for
         SQLiteDatabase sqDB = getWritableDatabase();
+        //Table columns and medicines in the database
         String []column = {"Status"};
         String []selArgs = {EMPTY_STRING + date, EMPTY_STRING + month, EMPTY_STRING + year};
 
@@ -435,11 +449,14 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
      * Need at Home Screen, First Analytic Scrren, Second Analytic Scrren, Day Fragment Screen
      * Main Activity for updating the dosesInArow as it changes according to the status we enter.**/
     public int getDosesInaRowDaily() {
+        //Database instance searched for
         SQLiteDatabase sqDB = getWritableDatabase();
+        //Table columns and medicines in the database
         String []column = {"Status", "Timestamp", "Date", "Month", "Year", "Choice"};
         Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null,
                 null, null, null, "Timestamp DESC");
 
+        //Quantity of doses taken by the user of the respective remedy
         int dosesInaRow = INT_ZERO;
 
         //One Iteration is done before entering the while loop for updating the previous and current dates
@@ -447,7 +464,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             cursor.moveToNext();
             if (cursor != null) {
                 String ts = EMPTY_STRING;
-
+                //Current date
                 int currDate = INT_ZERO;
 
                 try {
@@ -459,7 +476,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     return 0;
                 }
 
+                //Previous date, min 1 - maximum 366
                 int prevDate = INT_ZERO;
+                //Previous date, min 1 - maximum 31
                 int prevDateMonth = INT_ZERO;
 
                 if (cursor.getString(0).compareTo("yes") == 0) {
@@ -475,7 +494,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     //Nothing to do
                 }
 
+                //Current date of month, min 1 - maximum 31
                 int currDateMonth = INT_ZERO;
+                //Current date of year, min 1 - maximum 366
                 int currDateYear = INT_ZERO;
 
                 /**Since Previous and Current Date our Updated,
@@ -535,8 +556,10 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 
+        //Days of months in a normal year
         final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30,
                 31, 30, 31};
+        //Days of months in a leap year
         final int[] daysOfMonthLeap = {31, 29, 31, 30, 31, 30, 31, 31, 30,
                 31, 30, 31};
 
@@ -553,6 +576,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //2000~current year valid years intervals
         assert year >= 2000 && year <= Calendar.YEAR;
 
+        //Instance of Calendar for take a max number of days in one year
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
 
@@ -563,8 +587,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
      * Need at Home Screen, First Analytic Scrren, Second Analytic Scrren, Day Fragment Screen
      * Main Activity for updating the dosesInArow as it changes according to the status we enter.**/
     public int getDosesInaRowWeekly() {
+        //Table columns and medicines in the database
         String []column = {"Status", "Timestamp", "Date", "Month", "Year"};
-
+        //Database instance searched for
         SQLiteDatabase sqDB = getWritableDatabase();
         Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null,
                 null, null, null, "Timestamp DESC");
