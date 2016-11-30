@@ -957,7 +957,10 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
     //Finding the No. of days between two dates for calculating adherence of daily drugs
     public long getIntervalDaily(Date s, Date e) {
         final long sLong = s.getTime();
+        assert sLong > 0 && sLong <= Long.MAX_VALUE;
+
         long eLong = e.getTime();
+        assert eLong > 0 && eLong <= Long.MAX_VALUE;
 
         //Amount of milliseconds in one day
         final long oneDay = 24 * 60 * 60 * 1000;
@@ -997,14 +1000,22 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     Log.d(TAG_DATABASE_HELPER,s.toString());
 
                     long currt = curr.getTime();
+                    assert currt > 0 && currt <= Long.MAX_VALUE;
+
                     long endt = e.getTime();
+                    assert endt > 0 && endt <= Long.MAX_VALUE;
 
                     Calendar cal = Calendar.getInstance();
+                    assert cal != null : "Starting calendar is null";
+
                     cal.setTime(s);
                     cal.add(Calendar.MONTH, 1);
 
                     s = cal.getTime();
+                    assert s != null;
+
                     long strt = s.getTime();
+                    assert strt > 0 && strt < Long.MAX_VALUE;
 
                     Log.d(TAG_DATABASE_HELPER, "Current Long:" + currt);
                     Log.d(TAG_DATABASE_HELPER, "End Long:" + endt);
