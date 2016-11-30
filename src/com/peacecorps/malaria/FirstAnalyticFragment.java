@@ -184,6 +184,7 @@ public class FirstAnalyticFragment extends Fragment {
         /*Updating Doses in a Row for Weekly and Daily Pill Seperately*/
         DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
 
+        //Checks the day between Monday and Friday
         if (mSharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",
                 false)) {
             int d = sqLite.getDosesInaRowWeekly();
@@ -198,7 +199,7 @@ public class FirstAnalyticFragment extends Fragment {
     }
 
     public void updateMediLastTime() {
-        /*Updating the most recent time medication was taken*/
+        //Updating the most recent time medication was taken
         if (checkMediLastTakenTime != null) {
             checkMediLastTakenTime.setText(mSharedPreferenceStore.mPrefsStore.getString(
                     "com.peacecorps.malaria.checkMediLastTakenTime", "").toString());
@@ -227,7 +228,8 @@ public class FirstAnalyticFragment extends Fragment {
 
                 String ch = btnRadButton.getText().toString();
 
-                if (ch.equalsIgnoreCase("yes")) {   //if yes, reset the database
+                //if yes, reset the database
+                if (ch.equalsIgnoreCase("yes")) {
                     DatabaseSQLiteHelper sqLite = new DatabaseSQLiteHelper(getActivity());
                     sqLite.resetDatabase();
 

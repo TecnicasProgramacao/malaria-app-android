@@ -117,6 +117,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         int dayOfMonth = calendarAux.get(Calendar.DATE);
         String timeStamp = EMPTY_STRING;
 
+        //Format the time passed if the day has only one digit
         if (dayIsSingleDigit(dayOfMonth)) {
             timeStamp = EMPTY_STRING + calendarAux.get(Calendar.YEAR) + "-"
                     + calendarAux.get(Calendar.MONTH) + "-" + calendarAux.get(Calendar.DATE);
@@ -175,6 +176,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     dateOfTableDatabbase);
             Log.d(TAG_DATABASE_HELPER, EMPTY_STRING + year);
 
+            /* If the date stored in the database is equal to the current date,
+                the required status is stored in the buffer */
             if (dateOfTableDatabbase == date) {
                 buffer.append(statusQueried);
             } else {
@@ -295,6 +298,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 int lim = cursorNoHaveStatus.getInt(0);
 
                 for (int i = 1; i < lim; i++) {
+                   //Formats the date if the day has a single digit
                    if (dayIsSingleDigit(date + i)) {
                        dateFormation = EMPTY_STRING + year + "-" + month + "-" + (date + i);
                    }
@@ -340,7 +344,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             String status = EMPTY_STRING;
             status = cursor.getString(idx);
 
+            //Checks if any status has been found before comparing
             if (status != null) {
+                //If the user has already taken the medication on the day
                 if (status.equalsIgnoreCase("yes")) {
                     return 0;
                 }

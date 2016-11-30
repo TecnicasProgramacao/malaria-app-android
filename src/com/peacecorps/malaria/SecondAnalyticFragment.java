@@ -223,10 +223,13 @@ public class SecondAnalyticFragment extends Fragment {
         firstMonthProgressLabel.setTypeface(cf);
         int progress = sqLH.getData(mdate, myear, choice);
         float progressp = 0;
-        if (choice.equalsIgnoreCase("daily"))
-            progressp = (float) progress / getNumberOfDaysInMonth(mdate) * 100;
-        else
-            progressp = progress * 25;
+        /* If the user chooses to take notifications daily progress will
+            be measured according to the days*/
+        if (choice.equalsIgnoreCase("daily")) {
+            progressp=(float) progress / getNumberOfDaysInMonth(mdate) * 100;
+        } else {
+            progressp=progress * 25;
+        }
 
         if(progressp>=50)
         {
@@ -242,7 +245,8 @@ public class SecondAnalyticFragment extends Fragment {
         secondMonthProgressLabel.setTypeface(cf);
         progress = sqLH.getData(mdate, myear, choice);
 
-
+        /* If the user chooses to take notifications daily progress will
+            be measured according to the days*/
         if (choice.equalsIgnoreCase("daily")) {
 
             final float progressFloat = (float) progress;
@@ -269,6 +273,9 @@ public class SecondAnalyticFragment extends Fragment {
         thirdMonthProgressLabel.setText(getMonth(date - 1));
         thirdMonthProgressLabel.setTypeface(cf);
         progress = sqLH.getData(mdate, myear, choice);
+
+        /* If the user chooses to take notifications daily progress will
+            be measured according to the days*/
         if (choice.equalsIgnoreCase("daily"))
             progressp = (float) progress / getNumberOfDaysInMonth(mdate) * 100;
         else
@@ -286,6 +293,9 @@ public class SecondAnalyticFragment extends Fragment {
         fourthMonthProgressLabel.setTypeface(cf);
         progress = sqLH.getData(mdate, myear, choice);
         Log.d(TAGSAF, "Query Return: " + progress);
+
+        /* If the user chooses to take notifications daily progress will
+            be measured according to the days*/
         if (choice.equalsIgnoreCase("daily"))
             progressp = (float) progress / getNumberOfDaysInMonth(mdate) * 100;
         else
