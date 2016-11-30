@@ -525,6 +525,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         final int[] daysOfMonthLeap = {31, 29, 31, 30, 31, 30, 31, 31, 30,
                 31, 30, 31};
 
+        //If the year is leap year the number of days in the month is returned
         if (isLeapYear(year)) {
             return daysOfMonthLeap[month];
         } else {
@@ -555,8 +556,10 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         int dosesInaRow = 1;
 
+        //If the user medication bank has something the cursor will go through the bank.
         if (cursor != null) {
             cursor.moveToNext();
+            //If the user medication bank has more one something the cursor will go through the bank.
             if (cursor != null) {
                 String ats = EMPTY_STRING;
                 try {
@@ -668,6 +671,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         String recentDate = "";
 
+        //If the user medication bank has something the cursor will go through the bank.
         if (cursor != null) {
             cursor.moveToNext();
             try {
@@ -708,13 +712,14 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         int a = 0, flag = 0;
 
         while (cursor.moveToNext()) {
-            a= cursor.getInt(1);
+            a = cursor.getInt(1);
             a++;
 
             flag = 1;
         }
         cv.put("Times", a);
 
+        //If it is found the flag will be equal to 1 and it will be updated
         if (flag == 1) {
             sqDB.update(LOCATION_TABLE, cv, "Location= ?", selArgs);
         }
@@ -754,8 +759,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             Log.d(TAG_DATABASE_HELPER, "Flag: " + flag);
         }
 
+        //If it is found the flag will be equal to 1 and it will be updated
         if (flag == 1) {
-
             cv.put("Quantity", quantity);
             sqDB.update(PACKING_TABLE, cv, "PackingItem= ?", selArgs);
         }
@@ -823,9 +828,13 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 null, "Timestamp ASC");
 
         int count = 0;
+
+        //If the user medication bank has something the cursor will go through the bank.
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 try {
+                    /* If the user has already taken the medicine on the day,
+                      the medicine counter taken will be increased */
                     if (cursor.getString(0).equalsIgnoreCase("yes") == true) {
                         count++;
                         Log.d(TAG_DATABASE_HELPER, "Counter :" + count);
@@ -856,6 +865,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         //If working dates are same,then checking what is the day on that dates.
         if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
+            //Increase the amount of medication taken on a given day of the week
             if (startCal.get(Calendar.DAY_OF_WEEK) == weekday) {
                 ++medDays;
                 return medDays;
@@ -884,7 +894,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
             startCal.add(Calendar.DAY_OF_MONTH, 1);
         } while (startCal.getTimeInMillis() <= endCal.getTimeInMillis());
-        
+
         if (startCal.get(Calendar.DAY_OF_WEEK) == endCal.get(Calendar.DAY_OF_WEEK)
                 && (startCal.get(Calendar.DAY_OF_WEEK) == weekday)) {
             ++medDays;
