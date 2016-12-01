@@ -656,6 +656,11 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                     int numDays = INT_ZERO;
                     numDays = getDayOfWeek(pdo);
 
+                    /*
+                        pPara is previous parameter of date, aPara is after parameter of date,
+                        If the posterior parameter is greater than or equal to the previous one,
+                        it means that the user took a dose.
+                     */
                     int pPara = INT_ZERO;
                     long aPara = INT_ZERO;
                     pPara = 7 - numDays + 7;
