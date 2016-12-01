@@ -724,10 +724,14 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     //Setting the Date Object to Human Readable Format
     private String getHumanDateFormat(String ats, int aMonth) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getHumanDateFormat");
+
         String aYear = ats.substring(0, 4);
         String aDate = ats.substring(Math.max(ats.length() - 2, 0));
         ats = aYear + "-" + aMonth + "-" + aDate;
+        Log.i(TAG_DATABASE_HELPER, "Human Date Format: " + ats);
 
+        Log.i(TAG_DATABASE_HELPER, "End of getHumanDateFormat");
         return ats;
     }
 
@@ -750,27 +754,43 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         } else {
             //Nothing to do
         }
+
         sqDB.close();
         return recentDate;
     }
 
     //Deleting the Database
     public void resetDatabase() {
+        Log.i(TAG_DATABASE_HELPER, "Enter in resetDatabase");
+
         SQLiteDatabase sqDB = getWritableDatabase();
 
         //Delete the table of User medication of database
         sqDB.delete(USER_MEDICATION_CHOICE_TABLE, null, null);
+        Log.i(TAG_DATABASE_HELPER, "User medication table is deleted");
+
         //Delete the table of settings of database
         sqDB.delete(APP_SETTING_TABLE, null, null);
+        Log.i(TAG_DATABASE_HELPER, "App settings table is deleted");
+
         //Delete the table of location of database
         sqDB.delete(LOCATION_TABLE, null, null);
+        Log.i(TAG_DATABASE_HELPER, "Tag database table is deleted");
+
         //Delete the table of packing of database
         sqDB.delete(PACKING_TABLE, null, null);
+        Log.i(TAG_DATABASE_HELPER, "Packing table is deleted");
+
         sqDB.close();
+
+        Log.i(TAG_DATABASE_HELPER, "End of resetDatabase");
+
     }
 
     //Inseting the location for maintaining Location History
     public void insertLocation(String location) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in insertLocation");
+
         SQLiteDatabase sqDB = getWritableDatabase();
         ContentValues cv = new ContentValues(2);
         cv.put("Location", location);
@@ -788,6 +808,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             a = cursor.getInt(1);
             a++;
 
+            Log.i(TAG_DATABASE_HELPER, "Counter of cursor database of insertLocation: " + a);
+
             flag = 1;
         }
         cv.put("Times", a);
@@ -799,13 +821,19 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         else {
             sqDB.insert(LOCATION_TABLE, "location", cv);
         }
+
+        Log.i(TAG_DATABASE_HELPER, "End of insertLocation");
+
     }
 
     //Fetching the Location
     public Cursor getLocation() {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getLocation");
 
         SQLiteDatabase sqDB = getWritableDatabase();
         String[]column = {"_id", "Location"};
+
+        Log.i(TAG_DATABASE_HELPER, "End of getLocation");
 
         return sqDB.query(LOCATION_TABLE, column,
                 null, null, null, null,
@@ -814,6 +842,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     //Inserting the Packing Item in DataBase when using Add Item Edit Text
     public void insertPackingItem(String pItem, int quantity, String status) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in insertPackingItem");
+
         ContentValues cv = new ContentValues(2);
         cv.put("PackingItem", pItem);
         cv.put("Status", status);
@@ -843,6 +873,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             cv.put("Quantity", quantity);
             sqDB.insert(PACKING_TABLE, "item", cv);
         }
+
+        Log.i(TAG_DATABASE_HELPER, "End of insertPackingItem");
     }
 
     //Fetching the Packing Item to be taken
