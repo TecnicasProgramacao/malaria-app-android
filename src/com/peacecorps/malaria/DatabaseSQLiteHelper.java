@@ -136,6 +136,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         Log.d(TAG_DATABASE_HELPER, timeStamp);
 
+        //This block updates the medication bank table with all information
         values.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com.peacecorps.malaria.drug",
                 INT_ZERO));
         values.put("Choice", choice);
@@ -289,6 +290,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         //Runs through the database and saves the last status saved
         while (cursor.moveToNext()) {
+            //Checks the status column of the User medication table and saves the last status
             statusQueried = cursor.getColumnIndex("Status");
             lastStatus = cursor.getString(statusQueried);
             hasStatus = true;
@@ -299,6 +301,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues(2);
 
         if (!hasStatus && lastStatus.equalsIgnoreCase(EMPTY_STRING)) {
+            //This block updates the medication bank table with all information
             contentValues.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com.peacecorps." +
                     "malaria.drug", INT_ZERO));
             contentValues.put("Choice", choice);
@@ -328,6 +331,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                    else {
                        dateFormation = EMPTY_STRING + year + "-" + month + "-0" + (date + i);
                    }
+
+                   //This block updates the medication bank table with all information
                    contentValues.put("Drug", SharedPreferenceStore.mPrefsStore.getInt("com." +
                            "peacecorps.malaria.drug", INT_ZERO));
                    contentValues.put("Choice", choice);
