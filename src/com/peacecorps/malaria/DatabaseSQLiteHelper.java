@@ -607,6 +607,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
      * Need at Home Screen, First Analytic Scrren, Second Analytic Scrren, Day Fragment Screen
      * Main Activity for updating the dosesInArow as it changes according to the status we enter.**/
     public int getDosesInaRowWeekly() {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getDosesInaRowWeekly");
+
         //Table columns and medicines in the database
         String []column = {"Status", "Timestamp", "Date", "Month", "Year"};
         //Database instance searched for
@@ -627,6 +629,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 }
                 catch (CursorIndexOutOfBoundsException e)
                 {
+                    Log.e(TAG_DATABASE_HELPER, "Error in index of cursor of the database");
+
                     return 0;
                 }
                 int aMonth = INT_ZERO;
@@ -672,11 +676,18 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         } else {
             //Nothing to do
         }
+
+        Log.i(TAG_DATABASE_HELPER, "Doses in a row: " + dosesInaRow);
+
+        Log.i(TAG_DATABASE_HELPER, "End of getDosesInaRowWeekly");
+
         return dosesInaRow;
     }
 
     //Getting the Date Object from the String
     private Date getDateObject(String s) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getDateObject");
+
         Date dobj = null;
 
         //Sets the date format
@@ -686,24 +697,36 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         try {
             dobj= sdf.parse(s);
         } catch (ParseException e) {
+            Log.e(TAG_DATABASE_HELPER, "Error in parser in getDateObject");
+
             e.printStackTrace();
         }
+
+        Log.i(TAG_DATABASE_HELPER, "End of getDateObject");
 
         return dobj;
     }
 
     //Getting the Day of Week from the String
     private int getDayOfWeek(Date d) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getDayOfWeek");
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(d);
         int day = cal.get(Calendar.DAY_OF_WEEK);
         assert day >= 0 && day <= 7;
+
+        Log.i(TAG_DATABASE_HELPER, "Day of week: " + day);
+
+        Log.i(TAG_DATABASE_HELPER, "End of getDayOfWeek");
 
         return day;
     }
 
     //Getting no. of Days between two interval
     private long getNumberOfDays(Date d1,Date d2) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getNumberOfDays");
+
         Calendar c = Calendar.getInstance();
         c.setTime(d1);
 
@@ -718,6 +741,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         long oneDay = 1000 * 60 * 60 * 24;
 
         long interval = (ld2-ld1) / oneDay;
+        Log.i(TAG_DATABASE_HELPER, "Interval of getNumbersOfDays: " + interval);
+
+        Log.i(TAG_DATABASE_HELPER, "End of getNumberOfDays");
 
         return interval;
     }
