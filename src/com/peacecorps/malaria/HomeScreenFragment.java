@@ -34,18 +34,18 @@ public class HomeScreenFragment extends Fragment {
     static final private int INIT_HOUR = 5;
     static final private int INIT_MINUTE = 30;
 
-    private Button mAcceptMedicationButton;
-    private Button mRejectMedicationButton;
-    private Button mSettingsButton;
-    private TextView mCurrentDateLabel;
-    private TextView mCurrentDayOfweekLabel;
-    private static CharSequence mGetCurrentDate;
-    private static int mDrugAcceptedCount;
-    private static int drugRejectedCount;
-    private Calendar mCalendar;
+    private Button mAcceptMedicationButton = null;
+    private Button mRejectMedicationButton = null;
+    private Button mSettingsButton = null;
+    private TextView mCurrentDateLabel = null;
+    private TextView mCurrentDayOfweekLabel = null;
+    private static CharSequence mGetCurrentDate = null;
+    private static int mDrugAcceptedCount = 0;
+    private static int drugRejectedCount = 0;
+    private Calendar mCalendar = null;
     private String[] mPossibledays = {"Sunday", "Monday", "Tuesday",
             "Wednesday", "Thursday", "Friday", "Saturday"};
-    private static View rootView;
+    private static View rootView = null;
     private static String TAGHSF = "HomeScreenFragment";
     //public static TextView checkMediLastTakenTime = null;
 
@@ -294,17 +294,22 @@ public class HomeScreenFragment extends Fragment {
         long interval = 0;
         long today = new Date().getTime();
         DatabaseSQLiteHelper sqLite= new DatabaseSQLiteHelper(getActivity());
-        long takenDate= sqLite.getFirstTime();
+        long takenDate = sqLite.getFirstTime();
+
         if(time.compareTo("firstRunTime")==0) {
             if(takenDate!=0) {
                 Log.d(TAGHSF, "First Run Time at FAF->" + takenDate);
+
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(takenDate);
                 cal.add(Calendar.MONTH, 1);
+
                 Log.d(TAGHSF,"CURRENT : "+cal.get(Calendar.MONTH));
-                Date start= cal.getTime();
-                Date end= Calendar.getInstance().getTime();
+
+                Date start = cal.getTime();
+                Date end = Calendar.getInstance().getTime();
                 end.setTime(today);
+
                 SharedPreferenceStore.mEditor.putLong("com.peacecorps.malaria."
                         + time, takenDate).apply();
                 if(SharedPreferenceStore.mPrefsStore.getBoolean("com.peacecorps.malaria.isWeekly",false)) {
@@ -323,7 +328,7 @@ public class HomeScreenFragment extends Fragment {
                 return 1;
         }
         else {
-            takenDate=SharedPreferenceStore.mPrefsStore.getLong("com.peacecorps.malaria."
+            takenDate = SharedPreferenceStore.mPrefsStore.getLong("com.peacecorps.malaria."
                     + time, takenDate);
             long oneDay = 1000 * 60 * 60 * 24;
             interval = (today - takenDate) / oneDay;

@@ -192,11 +192,11 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                     "October", "November", "December" };
             private final int[] daysOfMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30,
                     31, 30, 31 };
-            private int daysInMonth;
-            private int currentDayOfMonth;
-            private int currentWeekDay;
-            private Button gridcell;
-            private TextView num_events_per_day;
+            private int daysInMonth = 0;
+            private int currentDayOfMonth = 0;
+            private int currentWeekDay = 0;
+            private Button gridcell = null;
+            private TextView num_events_per_day = null;
             private final HashMap<String, Integer> eventsPerMonthMap;
             private final SimpleDateFormat dateFormatter = new SimpleDateFormat(
                     "dd-MMM-yyyy");
@@ -209,9 +209,11 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                 this.list = new ArrayList<String>();
                 Log.d(tag, "==> Passed in Date FOR Month: " + month + " "
                         + "Year: " + year);
+
                 Calendar calendar = Calendar.getInstance();
                 setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
                 setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
+
                 Log.d(tag, "New Calendar:= " + calendar.getTime().toString());
                 Log.d(tag, "CurrentDayOfWeek :" + getCurrentWeekDay());
                 Log.d(tag, "CurrentDayOfMonth :" + getCurrentDayOfMonth());
@@ -223,6 +225,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                 eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
             }
             Intent intent = new Intent(getApplication(),DayFragmentActivity.class);
+
             private String getMonthAsString(int i) {
                 return months[i];
             }
@@ -434,8 +437,10 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                 gridcell.setTag(theday + "-" + themonth + "-" + theyear);
                 gridcell.setBackgroundResource(R.drawable.calendar_button_selector);
                 /**Customization, of each grid cell on basis of query, added by Ankita**/
-                int status;
-                status=dbSQLH.isEntered(Integer.parseInt(theday),getMonthNumber(themonth),Integer.parseInt(theyear));
+                int status = 0;
+                status = dbSQLH.isEntered(Integer.parseInt(theday),
+                        getMonthNumber(themonth),
+                        Integer.parseInt(theyear));
                 Drawable dr;
                 //Setting the Drawables according to Taken or Not Taken
                 switch (status) {
@@ -479,7 +484,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
                 String date_month_year = (String) view.getTag();
                 //selectedDayMonthYearButton.setText(" " + date_month_year);
                 Log.e("Selected dates", date_month_year);
-                Date parsedDate=Calendar.getInstance().getTime();
+                Date parsedDate = Calendar.getInstance().getTime();
                 try {
                     parsedDate = dateFormatter.parse(date_month_year);
                     Log.d(tag, "Parsed Date: " + parsedDate.toString());
@@ -516,19 +521,18 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
             public int getMonthNumber(String month)
             {
                 SimpleDateFormat sdf=  new SimpleDateFormat("MMMM");
-                Date date=Calendar.getInstance().getTime();
+                Date date = Calendar.getInstance().getTime();
             try {
-                date   = sdf.parse(month);
+                date = sdf.parse(month);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
-            int monthInteger=cal.get(Calendar.MONTH);
+            int monthInteger = cal.get(Calendar.MONTH);
             Log.d("ThirdAnalyticFragment","Month Integer is:"+monthInteger);
             return monthInteger;
-
         }
 
     }
