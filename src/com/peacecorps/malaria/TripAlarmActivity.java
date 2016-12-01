@@ -26,7 +26,7 @@ import java.util.Date;
  */
 public class TripAlarmActivity extends Activity {
 
-    private SimpleCursorAdapter dataAdapter;
+    private SimpleCursorAdapter dataAdapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

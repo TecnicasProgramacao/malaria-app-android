@@ -30,17 +30,18 @@ import java.net.PasswordAuthentication;
  */
 public class SideEffectsPCVFragmentActivity extends FragmentActivity {
     //views
-    private TextView mSideEffectsPCVLabel,sep;
+    private TextView mSideEffectsPCVLabel = null;
+    private TextView sep = null;
 
     private static String TAGSEP = SideEffectsPCVFragmentActivity.class.getSimpleName();
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog = null;
 
     //json object response url
     private String urlJsonObj = "http://pc-web-dev.systers.org/api/posts/3/?format=json";
 
     // temporary string to show the parsed response
-    private String jsonResponse;
+    private String jsonResponse = "";
 
 
     @Override

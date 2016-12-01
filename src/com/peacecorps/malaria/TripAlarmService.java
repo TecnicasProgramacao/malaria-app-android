@@ -12,7 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class TripAlarmService extends IntentService {
-    private NotificationManager alarmNotificationManager;
+    private NotificationManager alarmNotificationManager = null;
 
     public TripAlarmService() {
         super("TripAlarmService");

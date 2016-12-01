@@ -31,17 +31,18 @@ import java.net.PasswordAuthentication;
 public class PercentSideEffectsFragmentActivity extends FragmentActivity {
 
     //views and dialogs
-    private TextView mPercentSideEffectsLabel,pse;
+    private TextView mPercentSideEffectsLabel = null;
+    private TextView pse = null;
 
     private static String TAGPSE = PercentSideEffectsFragmentActivity.class.getSimpleName();
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog = null;
 
     //json object response url
     private String urlJsonObj = "http://pc-web-dev.systers.org/api/posts/2/?format=json";
 
     // temporary string to show the parsed response
-    private String jsonResponse;
+    private String jsonResponse = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

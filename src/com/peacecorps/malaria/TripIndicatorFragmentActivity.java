@@ -52,36 +52,38 @@ import java.util.Date;
  */
 public class TripIndicatorFragmentActivity extends FragmentActivity {
     //declaring views
-    public boolean sent;
-    private Button btnInfoHub, btnHome,btnGenerate,btnGear;
-    private String mDrugPicked,mLocationPicked;
-    public static String mDatesPicked;
-    private TextView dateData,monthData,yearData,DepartureDateData,DepartureMonthData,DepartureYearData;
-    public static AutoCompleteTextView locationSpinner;
+    public boolean sent = false;
+    private Button btnInfoHub = null, btnHome = null, btnGenerate = null, btnGear = null;
+    private String mDrugPicked = "",mLocationPicked = "";
+    public static String mDatesPicked = "";
+    private TextView dateData = null, monthData = null, yearData = null, DepartureDateData = null,
+            DepartureMonthData = null,DepartureYearData = null;
+    public static AutoCompleteTextView locationSpinner = null;
 
     private static boolean[] checkSelected;
 
     private ArrayList<String> items;
-    public boolean arriv,depar;
-    static SharedPreferenceStore mSharedPreferenceStore;
+    public boolean arriv = false, depar = false;
+    static SharedPreferenceStore mSharedPreferenceStore = null;
     private Dialog dialog = null;
-    private ImageView loc_history;
-    public static TextView packingSelect;
-    public static final String DRUG_TAG="com.peacecorps.malaria.TripIndicatorFragmentActivity.DRUG_TAG";
-    long num_drugs=0;
-    private String arrival_formattedate, departure_formattedate;
-    private String TAGTIFA="Trip Indicator Activity";
-    AlarmManager alarmManager;
-    private PendingIntent pendingIntent;
-    private int dep_year,dep_month,dep_day;
-    private static TripIndicatorFragmentActivity inst;
-    private int ALARM_HOUR=22, ALARM_MINUTE=0, ALARM_SECONDS=0;
-    private TextView tripTime;
+    private ImageView loc_history = null;
+    public static TextView packingSelect = null;
+    public static final String DRUG_TAG =
+            "com.peacecorps.malaria.TripIndicatorFragmentActivity.DRUG_TAG";
+    long num_drugs = 0;
+    private String arrival_formattedate = "", departure_formattedate = "";
+    private String TAGTIFA = "Trip Indicator Activity";
+    AlarmManager alarmManager = null;
+    private PendingIntent pendingIntent = null;
+    private int dep_year = 0, dep_month = 0, dep_day = 0;
+    private static TripIndicatorFragmentActivity inst = null;
+    private int ALARM_HOUR = 22, ALARM_MINUTE = 0, ALARM_SECONDS = 0;
+    private TextView tripTime = null;
     private DatabaseSQLiteHelper sqLite, location_sqLite;
-    private String loc="";
-    private TimePicker tp;
-    private View v;
-    private TextView pmtLabel;
+    private String loc = "";
+    private TimePicker tp = null;
+    private View v = null;
+    private TextView pmtLabel = null;
 
     public static TripIndicatorFragmentActivity instance(){
         return inst;
@@ -240,8 +242,8 @@ public class TripIndicatorFragmentActivity extends FragmentActivity {
                 Log.d(TAGTIFA, "Date:" + dep_year + " " + dep_month + " " + dep_day);
                 calendar.set(dep_year,dep_month,dep_day,ALARM_HOUR,ALARM_MINUTE,ALARM_SECONDS);
                 long deptime= calendar.getTimeInMillis();
-                long today= Calendar.getInstance().getTimeInMillis();
-                long interval=0;
+                long today = Calendar.getInstance().getTimeInMillis();
+                long interval =0;
                 Log.d(TAGTIFA,"Dep Time:"+deptime);
                 Log.d(TAGTIFA, "Today: " + today);
                 if(deptime>today) {
