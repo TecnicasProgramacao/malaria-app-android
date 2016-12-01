@@ -83,7 +83,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()) {
             isDataFound = true;
-            count += 1;
+            count += INT_ZERO;
 
             dates.add(cursor.getInt(1));
             percentages.add(cursor.getDouble(2));
@@ -114,8 +114,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues(2);
 
         //Instance of the Calendar class that will be used to save the current day
-        Calendar calendarAux;
-        calendarAux = Calendar.getInstance();
+        Calendar calendarAux = Calendar.getInstance();
         assert calendarAux != null : "Starting calendar is null";
 
         calendarAux.setTime(date);
@@ -282,7 +281,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 "Date=? AND Month =? AND Year =?", selArgs, null, null, null, null);
 
         //Status of medication taken queried
-        int statusQueried;
+        int statusQueried = INT_ZERO;
         //If has status of medication taken
         boolean hasStatus = false;
         //Last status of medication taken
@@ -718,8 +717,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //Calculates the amount of milliseconds in a day
         long oneDay = 1000 * 60 * 60 * 24;
 
-        long interval = 0;
-        interval = (ld2-ld1) / oneDay;
+        long interval = (ld2-ld1) / oneDay;
 
         return interval;
     }
@@ -739,7 +737,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column,
                 null, null, null, null, "Timestamp DESC LIMIT 1");
 
-        String recentDate = "";
+        String recentDate = EMPTY_STRING;
 
         //If the user medication bank has something the cursor will go through the bank.
         if (cursor != null) {
@@ -783,7 +781,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = sqDB.query(LOCATION_TABLE, columns, "Location = ?", selArgs,
                 null, null, null);
 
-        int a = 0, flag = 0;
+        int a = INT_ZERO;
+        int flag = INT_ZERO;
 
         while (cursor.moveToNext()) {
             a = cursor.getInt(1);
@@ -826,7 +825,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = sqDB.query(PACKING_TABLE, columns, "PackingItem = ?", selArgs, null,
                 null, null);
 
-        int flag = 0, q = 0;
+        int flag = INT_ZERO;
+        int q = INT_ZERO;
+
         while (cursor.moveToNext()) {
             q = cursor.getInt(1);
             flag++;
@@ -869,7 +870,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     //Refreshing the status of each packing item to its original state
     public void refreshPackingItemStatus() {
-        String pItem = "";
+        String pItem = EMPTY_STRING;
         String[] selArgs = {pItem};
 
         ContentValues cv = new ContentValues(2);
@@ -901,7 +902,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null, null, null,
                 null, "Timestamp ASC");
 
-        int count = 0;
+        int count = INT_ZERO;
 
         //If the user medication bank has something the cursor will go through the bank.
         if (cursor != null) {
@@ -935,7 +936,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         assert endCal != null : "Ending calendar is null";
         endCal.setTime(e);
 
-        int medDays = 0;
+        int medDays = INT_ZERO;
 
         //If working dates are same,then checking what is the day on that dates.
         if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
@@ -1001,7 +1002,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor= sqDB.query(USER_MEDICATION_CHOICE_TABLE, column, null, null, null,
                 null, "Timestamp ASC");
 
-        int count = 0;
+        int count = INT_ZERO;
 
         //If the medication bank has something the cursor will go through the bank.
         if (cursor != null) {

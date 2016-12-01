@@ -23,11 +23,11 @@ import java.util.Date;
 public class FirstAnalyticFragment extends Fragment {
 
 
-    static SharedPreferenceStore mSharedPreferenceStore;
+    static SharedPreferenceStore mSharedPreferenceStore = null;
     public static TextView checkMediLastTakenTime = null;
     public static TextView doses = null;
     public static TextView adherence = null;
-    private Button mSettingsButton;
+    private Button mSettingsButton = null;
     private String TAGFAF = "FirstAnalyticFragment";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,9 +45,13 @@ public class FirstAnalyticFragment extends Fragment {
 
         updateUI();
 
-        TextView mlt, dinr, atm;
+        TextView mlt;
         mlt = (TextView) rootView.findViewById(R.id.mlt);
+
+        TextView dinr;
         dinr = (TextView) rootView.findViewById(R.id.dinr);
+
+        TextView atm;
         atm = (TextView) rootView.findViewById(R.id.atm);
 
         //setting fonts
@@ -165,6 +169,7 @@ public class FirstAnalyticFragment extends Fragment {
 
         final int PERCENTAGE = 100; // Adherence rate will be shown as percentage.
         double adherenceRate = -1.0;
+
         if(interval != 1) {
             adherenceRate = ((double) takenCount / (double) interval) * PERCENTAGE;
         }

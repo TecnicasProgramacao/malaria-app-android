@@ -42,15 +42,15 @@ import com.peacecorps.malaria.app_date.IllegalYearException;
 public class ThirdAnalyticFragment extends Activity implements OnClickListener {
     private static final String tag = "ThirdAnalyticFragment";
     public final static String DATE_TAG = "com.peacecorps.malaria.thirdanalyticfragment.SELECTED_DATE";
-    private TextView currentMonth;
+    private TextView currentMonth = null;
     //private Button selectedDayMonthYearButton;
-    private ImageView prevMonth;
-    private ImageView nextMonth;
-    private GridView calendarView;
-    private GridCellAdapter adapter;
-    private Calendar _calendar;
+    private ImageView prevMonth = null;
+    private ImageView nextMonth = null;
+    private GridView calendarView = null;
+    private GridCellAdapter adapter = null;
+    private Calendar _calendar = null;
     @SuppressLint("NewApi")
-    private int month, year;
+    private int month = 0, year = 0;
     @SuppressWarnings("unused")
     @SuppressLint({ "NewApi", "NewApi", "NewApi", "NewApi" })
     private final DateFormat dateFormatter = new DateFormat();
@@ -69,11 +69,12 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
 
         /** Added by Ankita for getting specific month **/
         Intent intent = getIntent();
-        String mon= intent.getStringExtra(SecondAnalyticFragment.MONTH_REQ);
-        Calendar cal; int intmon=0; Date dat;
+        String mon = intent.getStringExtra(SecondAnalyticFragment.MONTH_REQ);
+        Calendar cal = Calendar.getInstance();;
+        int intmon = 0;
+        Date dat = null;
         try{
             dat = new SimpleDateFormat("MMMM").parse(mon);
-            cal = Calendar.getInstance();
             cal.setTime(dat);
             intmon= cal.get(Calendar.MONTH);
         }
@@ -86,7 +87,7 @@ public class ThirdAnalyticFragment extends Activity implements OnClickListener {
         _calendar.set(Calendar.MONTH,intmon+1);
         month = _calendar.get(Calendar.MONTH);
 
-        Calendar cal_head= Calendar.getInstance();
+        Calendar cal_head = Calendar.getInstance();
         cal_head.set(Calendar.MONTH,intmon);
 
 
