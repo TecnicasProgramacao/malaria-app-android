@@ -847,6 +847,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     //Fetching the Packing Item to be taken
     public Cursor getPackingItemChecked() {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getPackingItemChecked");
+
         SQLiteDatabase sqDB = getWritableDatabase();
 
         String[] column = {"_id", "PackingItem", "Quantity"};
@@ -855,14 +857,20 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = sqDB.query(PACKING_TABLE, column, "Status= ?", selArgs,
                 null, null, KEY_ROW_ID + " asc ");
 
+        Log.i(TAG_DATABASE_HELPER, "End of getPackingItemChecked");
+
         return cursor;
     }
 
     //Fetching the list of Packing Item from which one can be chosen
     public Cursor getPackingItem() {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getPackingItem");
 
         SQLiteDatabase sqDB = getWritableDatabase();
         String[] column = {"_id", "PackingItem", "Quantity"};
+
+        Log.i(TAG_DATABASE_HELPER, "End of getPackingItem");
+
         return sqDB.query(PACKING_TABLE, column,
                 null, null, null, null,
                 KEY_ROW_ID + " asc ");
@@ -870,6 +878,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     //Refreshing the status of each packing item to its original state
     public void refreshPackingItemStatus() {
+        Log.i(TAG_DATABASE_HELPER, "Enter in refreshPackingItemStatus");
+
         String pItem = EMPTY_STRING;
         String[] selArgs = {pItem};
 
@@ -888,14 +898,19 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                 selArgs[0] = cursor.getString(1);
                 sqDB.update(PACKING_TABLE, cv, "PackingItem=?", selArgs);
             } catch (Exception e) {
+                Log.e(TAG_DATABASE_HELPER, "Exception in update of packing item");
                 break;
             }
         }
+
+        Log.i(TAG_DATABASE_HELPER, "End of refreshPackingItemStatus");
     }
 
 
     //Finding the No. of Drugs
     public int getCountTaken() {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getCountTaken");
+
         String[] column = {"Status", "Timestamp", "Date", "Month", "Year", "Choice"};
 
         SQLiteDatabase sqDB = getWritableDatabase();
@@ -912,7 +927,7 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
                       the medicine counter taken will be increased */
                     if (cursor.getString(0).equalsIgnoreCase("yes") == true) {
                         count++;
-                        Log.d(TAG_DATABASE_HELPER, "Counter :" + count);
+                        Log.d(TAG_DATABASE_HELPER, "Counter of medicines:" + count);
                     }
                 } catch (NullPointerException npe) {
                     return 0;
@@ -921,6 +936,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         } else {
             //Nothing to do
         }
+
+        Log.i(TAG_DATABASE_HELPER, "End of getCountTaken");
         sqDB.close();
         return count;
     }
@@ -928,6 +945,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
 
     //Finding the No. of weekly days between two dates for calculating Adherence
     public int getIntervalWeekly(Date s, Date e, int weekday) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getIntervalWeekly");
+
         Calendar startCal = Calendar.getInstance();
         assert startCal != null : "Starting calendar is null";
         startCal.setTime(s);
@@ -943,6 +962,9 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             //Increase the amount of medication taken on a given day of the week
             if (startCal.get(Calendar.DAY_OF_WEEK) == weekday) {
                 ++medDays;
+
+                Log.i(TAG_DATABASE_HELPER, "Medicine days: " + medDays);
+
                 return medDays;
             } else {
                 //Nothing to do
@@ -977,11 +999,16 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             //Nothing to do
         }
 
+        Log.i(TAG_DATABASE_HELPER, "Medicine days: " + medDays);
+
+        Log.i(TAG_DATABASE_HELPER, "End of getIntervalWeekly");
         return medDays;
     }
 
     //Finding the No. of days between two dates for calculating adherence of daily drugs
     public long getIntervalDaily(Date s, Date e) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getIntervalDaily");
+
         final long sLong = s.getTime();
         assert sLong > 0 && sLong <= Long.MAX_VALUE;
 
@@ -991,11 +1018,17 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
         //Amount of milliseconds in one day
         final long oneDay = 24 * 60 * 60 * 1000;
         final long interval = ((eLong - sLong) / oneDay) + 1;
+
+        Log.i(TAG_DATABASE_HELPER, "Interval: " + interval);
+
+        Log.i(TAG_DATABASE_HELPER, "End of getIntervalDaily");
         return interval;
     }
 
     //Finding the Drugs between two dates for updaing Adherence in Day Fragment Activity of any selected dates
     public int getCountTakenBetween(Date s,Date e) {
+        Log.i(TAG_DATABASE_HELPER, "Enter in getCountTakenBetween");
+
         String[] column = {"Status", "Timestamp", "Date", "Month", "Year", "Choice"};
 
         SQLiteDatabase sqDB = getWritableDatabase();
@@ -1068,6 +1101,8 @@ public class DatabaseSQLiteHelper extends SQLiteOpenHelper {
             //Nothing to do
         }
         sqDB.close();
+
+        Log.i(TAG_DATABASE_HELPER, "End of getCountTakenBetween");
         return count;
     }
 
